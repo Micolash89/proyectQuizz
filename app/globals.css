@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0f172a;
+  --foreground: #e2e8f0;
 }
 
 @theme inline {
@@ -12,15 +12,41 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Dark theme as default */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Global dark mode colors */
+html, html[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  color-scheme: dark;
+}
+
+/* Utility classes for dark theme */
+.dark-bg {
+  @apply bg-slate-900;
+}
+
+.dark-card {
+  @apply bg-slate-800 border border-slate-700;
+}
+
+.dark-input {
+  @apply bg-slate-800 border border-slate-600 text-slate-100 placeholder-slate-400;
+}
+
+.dark-button {
+  @apply bg-slate-700 text-slate-100 hover:bg-slate-600 transition-colors;
+}
+
+/* Remove light theme media query since we want dark only */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #0f172a;
+    --foreground: #e2e8f0;
+  }
 }

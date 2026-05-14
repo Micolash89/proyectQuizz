@@ -1,65 +1,169 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FeedbackMode } from "@/types/quiz";
 
 export default function Home() {
+  const router = useRouter();
+  const [feedbackMode, setFeedbackMode] = useState<FeedbackMode>("end_only");
+  const [questionCount, setQuestionCount] = useState<number>(25);
+  const [loading, setLoading] = useState(false);
+
+  const handleStartQuiz = () => {
+    setLoading(true);
+    router.push(`/quiz?feedback=${feedbackMode}&count=${questionCount}`);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4">
+      <div className="max-w-2xl w-full">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-100 mb-2">
+            Quiz Calidad de Software
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-slate-400">Preparación para el primer parcial - UNLaM</p>
+        </div>
+
+        {/* Main Card */}
+        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-8 mb-8">
+          {/* Quiz Info */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div className="bg-slate-700/50 rounded-lg p-4 text-center">
+              <div className="text-3xl font-bold text-blue-400 mb-1">{questionCount}</div>
+              <div className="text-slate-300 text-sm">Preguntas</div>
+            </div>
+            <div className="bg-slate-700/50 rounded-lg p-4 text-center">
+              <div className="text-3xl font-bold text-green-400 mb-1">~{Math.ceil((questionCount / 100) * 45)}</div>
+              <div className="text-slate-300 text-sm">Minutos</div>
+            </div>
+            <div className="bg-slate-700/50 rounded-lg p-4 text-center">
+              <div className="text-3xl font-bold text-purple-400 mb-1">16</div>
+              <div className="text-slate-300 text-sm">Categorías</div>
+            </div>
+          </div>
+
+          {/* Content Overview */}
+          <div className="mb-8 pb-8 border-b border-slate-700">
+            <h2 className="text-xl font-semibold text-slate-100 mb-4">Contenido</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
+              <div className="flex items-start gap-2">
+                <span className="text-blue-400 font-bold">•</span>
+                <span>Historia y evolución de la calidad</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-blue-400 font-bold">•</span>
+                <span>Definiciones y conceptos fundamentales</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-blue-400 font-bold">•</span>
+                <span>Ciclo PDCA (Deming)</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-blue-400 font-bold">•</span>
+                <span>Principios y herramientas de calidad</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-blue-400 font-bold">•</span>
+                <span>ISO 9126 y métricas de software</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-blue-400 font-bold">•</span>
+                <span>Puntos de función y análisis de casos</span>
+              </div>
+            </div>
+          </div>
+
+           {/* Question Count Selection */}
+           <div className="mb-8">
+             <h2 className="text-xl font-semibold text-slate-100 mb-4">Cantidad de Preguntas</h2>
+             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+               {[15, 25, 50].map((count) => (
+                <button
+                  key={count}
+                  onClick={() => setQuestionCount(count)}
+                  className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                    questionCount === count
+                      ? "bg-blue-600 text-white border-2 border-blue-400"
+                      : "bg-slate-700/50 text-slate-300 hover:bg-slate-700 border-2 border-slate-700"
+                  }`}
+                >
+                  {count}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Feedback Mode Selection */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-slate-100 mb-4">Modo de Retroalimentación</h2>
+            <div className="space-y-3">
+              <label className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg cursor-pointer hover:bg-slate-700 transition border-2 border-slate-700"
+                style={{ borderColor: feedbackMode === "immediate" ? "#3b82f6" : undefined }}>
+                <input
+                  type="radio"
+                  name="feedback"
+                  value="immediate"
+                  checked={feedbackMode === "immediate"}
+                  onChange={(e) => setFeedbackMode(e.target.value as FeedbackMode)}
+                  className="w-4 h-4 cursor-pointer"
+                />
+                <div>
+                  <div className="font-semibold text-slate-100">Retroalimentación Inmediata</div>
+                  <div className="text-sm text-slate-400">Ver la respuesta correcta después de cada pregunta</div>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg cursor-pointer hover:bg-slate-700 transition border-2 border-slate-700"
+                style={{ borderColor: feedbackMode === "end_only" ? "#3b82f6" : undefined }}>
+                <input
+                  type="radio"
+                  name="feedback"
+                  value="end_only"
+                  checked={feedbackMode === "end_only"}
+                  onChange={(e) => setFeedbackMode(e.target.value as FeedbackMode)}
+                  className="w-4 h-4 cursor-pointer"
+                />
+                <div>
+                  <div className="font-semibold text-slate-100">Retroalimentación al Final (Recomendado)</div>
+                  <div className="text-sm text-slate-400">Ver todas las respuestas al completar el quiz</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          {/* Start Button */}
+          <button
+            onClick={handleStartQuiz}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-slate-600 disabled:to-slate-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95 text-lg"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="inline-block animate-spin">⏳</span>
+                Iniciando...
+              </span>
+            ) : (
+              "Comenzar Quiz"
+            )}
+          </button>
+        </div>
+
+        {/* Footer Info */}
+        <div className="text-center text-sm text-slate-500">
+          <p className="mb-2">
+            ✓ 80% teoría + 20% cálculos
+            {" • "}
+            ✓ Preguntas aleatorias
+            {" • "}
+            ✓ Retroalimentación completa
+          </p>
+          <p>
+            Basado en los apuntes de la cátedra - Primer Parcial Calidad de Software
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
