@@ -1005,12 +1005,12 @@ export const questionsBank: Question[] = [
     options: [
       { letter: "A", text: "0.70" },
       { letter: "B", text: "1.05" },
-      { letter: "C", text: "1.35" },
+      { letter: "C", text: "1.17" },
       { letter: "D", text: "0.95" },
     ],
     correctAnswer: "C",
     justification:
-      "Suma factores = (2×0) + (4×3) + (8×5) = 0 + 12 + 40 = 52. Factor Ajuste = 0.65 + (52/100) = 0.65 + 0.52 = 1.17... Opciones no exactas. Máximo es 1.35 (todos 5s). Fuente: Cálculo PF.",
+      "Suma factores = (2×0) + (4×3) + (8×5) = 0 + 12 + 40 = 52. Factor Ajuste = 0.65 + (52/100) = 0.65 + 0.52 = 1.17. La fórmula de Albrecht aplica 14 factores de ajuste técnicos (escala 0-5), donde el factor base es 0.65 y la contribución total se divide por 100. Fuente: Cálculo PF.",
     category: "pf_calculo",
     difficulty: "hard",
     source: "Cálculos",
