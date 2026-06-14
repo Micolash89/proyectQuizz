@@ -14,7 +14,16 @@ export type QuestionCategory =
   | "decisiones"
   | "casos_practicos"
   | "vf_justificado"
-  | "analisis";
+  | "analisis"
+  // Segundo parcial
+  | "riesgos"
+  | "costos_calidad"
+  | "deming"
+  | "accesibilidad"
+  | "heuristica"
+  | "testing";
+
+export type Partial = "primer" | "segundo";
 
 export type Difficulty = "easy" | "medium" | "hard";
 export type QuestionType = "multiple_choice" | "true_false" | "calculation" | "analysis";
@@ -35,6 +44,7 @@ export interface Question {
   category: QuestionCategory;
   difficulty: Difficulty;
   source: string; // "Apunte 1", "Evans Cap 1", "Fichas Miel", etc
+  partial: Partial; // "primer" o "segundo"
   relatedConcepts?: string[]; // Conceptos relacionados
 }
 

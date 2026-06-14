@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { questionsBank } from "@/data/questions";
-import { FeedbackMode } from "@/types/quiz";
+import { FeedbackMode, Partial } from "@/types/quiz";
 import { useQuiz } from "@/hooks/useQuiz";
 import { QuestionCard } from "@/components/QuestionCard";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -15,22 +15,25 @@ function QuizPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const feedbackMode = (searchParams.get("feedback") as FeedbackMode) || "end_only";
+  const partialParam = (searchParams.get("partial") as Partial) || "primer";
   
-  // Get and validate question count
+  // Get and validate question count - "todas" means all questions
   const countParam = searchParams.get("count");
-  const validCounts = [15, 25, 50];
+  const isTodas = countParam === "todas" || countParam === "0";
   const parsedCount = countParam ? parseInt(countParam, 10) : 25;
-  const questionCount = validCounts.includes(parsedCount) ? parsedCount : 25;
+  const questionCount = isTodas ? 0 : ([15, 25, 50].includes(parsedCount) ? parsedCount : 25);
 
   const [questions, setQuestions] = useState<typeof questionsBank>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  // Initialize with shuffled questions on mount
+  // Initialize with shuffled questions on mount, filtered by partial
   useEffect(() => {
-    const shuffled = shuffle(questionsBank);
-    setQuestions(shuffled.slice(0, questionCount));
-  }, [questionCount]);
+    const filteredQuestions = questionsBank.filter((q) => q.partial === partialParam);
+    const shuffled = shuffle(filteredQuestions);
+    // questionCount === 0 means "todas" (all questions)
+    setQuestions(questionCount === 0 ? shuffled : shuffled.slice(0, questionCount));
+  }, [questionCount, partialParam]);
 
   const {
     quizState,
@@ -65,7 +68,7 @@ function QuizPageContent() {
 
   const handleFinish = () => {
     const results = calculateResults();
-    router.push(`/results?data=${btoa(JSON.stringify(results))}&feedback=${feedbackMode}&count=${questionCount}`);
+    router.push(`/results?data=${btoa(JSON.stringify(results))}&feedback=${feedbackMode}&count=${questionCount}&partial=${partialParam}`);
   };
 
   if (!currentQuestion) {
@@ -84,9 +87,6 @@ function QuizPageContent() {
   const selectedAnswerValue = quizState.answers.find(
     (a) => a.questionId === currentQuestion.id
   )?.selectedAnswer;
-  
-  // Convert array to string if needed (for multiple choice, we expect single answer)
-  const selectedAnswer = typeof selectedAnswerValue === 'string' ? selectedAnswerValue : undefined;
 
   const feedbackAnswer = quizState.feedbackAnswer;
 
@@ -95,7 +95,9 @@ function QuizPageContent() {
       <div className="max-w-4xl mx-auto">
         {/* Header with close button */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-slate-100">Quiz - Calidad de Software</h1>
+          <h1 className="text-2xl font-bold text-slate-100">
+            Quiz - Calidad de Software ({partialParam === "primer" ? "Primer Parcial" : "Segundo Parcial"})
+          </h1>
           <button
             onClick={() => {
               if (confirm("¿Deseas abandonar el quiz?")) {
@@ -123,7 +125,7 @@ function QuizPageContent() {
             totalQuestions={totalQuestions}
             onSelect={selectAnswer}
             hasAnswered={hasAnsweredCurrent}
-            selectedAnswer={selectedAnswer}
+            selectedAnswer={selectedAnswerValue}
             showFeedback={quizState.showFeedback}
             feedbackAnswer={
               feedbackAnswer

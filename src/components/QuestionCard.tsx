@@ -7,9 +7,9 @@ interface QuestionCardProps {
   question: Question;
   currentNumber: number;
   totalQuestions: number;
-  onSelect: (answer: string) => void;
+  onSelect: (answer: string | string[]) => void;
   hasAnswered: boolean;
-  selectedAnswer?: string;
+  selectedAnswer?: string | string[];
   showFeedback: boolean;
   feedbackAnswer?: {
     isCorrect: boolean;
@@ -28,6 +28,16 @@ export function QuestionCard({
   feedbackAnswer,
 }: QuestionCardProps) {
   const [expanded, setExpanded] = useState(false);
+  
+  // Determine if this is a multi-answer question
+  const isMultiAnswer = Array.isArray(question.correctAnswer);
+  
+  // Local state for multi-select checkboxes
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState<Set<string>>(
+    isMultiAnswer && Array.isArray(selectedAnswer)
+      ? new Set(selectedAnswer)
+      : new Set()
+  );
 
   const getDifficultyColor = () => {
     switch (question.difficulty) {
@@ -60,8 +70,32 @@ export function QuestionCard({
       casos_practicos: "bg-violet-900/30 text-violet-300",
       vf_justificado: "bg-lime-900/30 text-lime-300",
       analisis: "bg-sky-900/30 text-sky-300",
+      riesgos: "bg-red-900/30 text-red-300",
+      costos_calidad: "bg-amber-900/30 text-amber-300",
+      deming: "bg-cyan-900/30 text-cyan-300",
+      accesibilidad: "bg-green-900/30 text-green-300",
+      heuristica: "bg-purple-900/30 text-purple-300",
+      testing: "bg-blue-900/30 text-blue-300",
     };
     return colors[question.category] || "bg-slate-700 text-slate-300";
+  };
+
+  const handleCheckboxChange = (letter: string) => {
+    if (hasAnswered) return;
+    
+    const newSelected = new Set(selectedCheckboxes);
+    if (newSelected.has(letter)) {
+      newSelected.delete(letter);
+    } else {
+      newSelected.add(letter);
+    }
+    setSelectedCheckboxes(newSelected);
+  };
+
+  const handleSubmitMultiAnswer = () => {
+    if (selectedCheckboxes.size > 0 && !hasAnswered) {
+      onSelect(Array.from(selectedCheckboxes));
+    }
   };
 
   return (
@@ -90,6 +124,11 @@ export function QuestionCard({
             <span className={`px-3 py-1 rounded text-xs font-medium border ${getCategoryColor()}`}>
               {question.category.replace(/_/g, " ")}
             </span>
+            {isMultiAnswer && (
+              <span className="px-3 py-1 rounded text-xs font-medium border bg-purple-900/30 text-purple-300 border-purple-700">
+                Múltiples respuestas
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -119,7 +158,7 @@ export function QuestionCard({
           </div>
         )}
 
-        {question.type === "multiple_choice" && (
+        {question.type === "multiple_choice" && !isMultiAnswer && (
           <div className="space-y-2">
             {question.options.map((option) => (
               <button
@@ -135,6 +174,42 @@ export function QuestionCard({
                 <span className="font-semibold">{option.letter})</span> {option.text}
               </button>
             ))}
+          </div>
+        )}
+
+        {question.type === "multiple_choice" && isMultiAnswer && (
+          <div>
+            <div className="space-y-2 mb-4">
+              {question.options.map((option) => (
+                <label
+                  key={option.letter}
+                  className={`flex items-start p-4 rounded border-2 cursor-pointer transition ${
+                    selectedCheckboxes.has(option.letter)
+                      ? "border-blue-500 bg-blue-900/20 text-slate-100"
+                      : "border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500"
+                  } ${hasAnswered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-700/50"}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedCheckboxes.has(option.letter)}
+                    onChange={() => handleCheckboxChange(option.letter)}
+                    disabled={hasAnswered}
+                    className="mt-1 mr-3 cursor-pointer"
+                  />
+                  <span>
+                    <span className="font-semibold">{option.letter})</span> {option.text}
+                  </span>
+                </label>
+              ))}
+            </div>
+            {!hasAnswered && selectedCheckboxes.size > 0 && (
+              <button
+                onClick={handleSubmitMultiAnswer}
+                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded transition"
+              >
+                Confirmar respuestas ({selectedCheckboxes.size})
+              </button>
+            )}
           </div>
         )}
       </div>

@@ -29,10 +29,26 @@ export const useQuiz = (questions: Question[], feedbackMode: FeedbackMode) => {
   const isLastQuestion = quizState.currentQuestionIndex === shuffledQuestions.length - 1;
 
   const selectAnswer = useCallback(
-    (answer: string) => {
+    (answer: string | string[]) => {
       if (!currentQuestion) return;
 
-      const isCorrect = answer === currentQuestion.correctAnswer;
+      // Helper function to compare answers (handles both string and array cases)
+      const compareAnswers = (selected: string | string[], correct: string | string[]): boolean => {
+        // If both are arrays, sort and compare
+        if (Array.isArray(selected) && Array.isArray(correct)) {
+          const sortedSelected = [...selected].sort();
+          const sortedCorrect = [...correct].sort();
+          return JSON.stringify(sortedSelected) === JSON.stringify(sortedCorrect);
+        }
+        // If both are strings, simple comparison
+        if (typeof selected === "string" && typeof correct === "string") {
+          return selected === correct;
+        }
+        // Otherwise, they don't match
+        return false;
+      };
+
+      const isCorrect = compareAnswers(answer, currentQuestion.correctAnswer);
 
       const newAnswer: UserAnswer = {
         questionId: currentQuestion.id,

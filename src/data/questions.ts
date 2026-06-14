@@ -1,6 +1,8 @@
 import { Question } from "@/types/quiz";
+import { secondPartialQuestionsBank } from "./secondPartialQuestions";
 
-export const questionsBank: Question[] = [
+// Agregar partial "primer" a todas las preguntas del primer parcial
+const firstPartialQuestions: Question[] = [
   // ============ HISTORIA Y EVOLUCIÓN (8 preguntas) ============
   {
     id: 1,
@@ -18,6 +20,7 @@ export const questionsBank: Question[] = [
     category: "historia",
     difficulty: "easy",
     source: "Apunte 1",
+    partial: "primer",
     relatedConcepts: ["Evolución de la calidad", "Inspección"],
   },
   {
@@ -37,6 +40,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Fichas Miel",
     relatedConcepts: ["Prevención", "Aseguramiento", "Control Estadístico"],
+    partial: "primer",
   },
   {
     id: 3,
@@ -53,6 +57,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Evolución conceptual", "Cambio de paradigma"],
+    partial: "primer",
   },
   {
     id: 4,
@@ -71,6 +76,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Control Estadístico", "Prevención"],
+    partial: "primer",
   },
   {
     id: 5,
@@ -89,6 +95,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Factor humano", "Mejora continua", "Trabajo en equipo"],
+    partial: "primer",
   },
   {
     id: 6,
@@ -107,6 +114,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Examen UNLaM 2024",
     relatedConcepts: ["Taylor", "Revolución Industrial", "Organización"],
+    partial: "primer",
   },
   {
     id: 7,
@@ -125,6 +133,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Fichas Miel",
     relatedConcepts: ["ISO", "Normalización", "Estándares"],
+    partial: "primer",
   },
   {
     id: 8,
@@ -143,6 +152,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Inspección", "Reactividad vs Proactividad"],
+    partial: "primer",
   },
 
   // ============ DEFINICIONES DE CALIDAD (10 preguntas) ============
@@ -163,6 +173,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 5",
     relatedConcepts: ["ISO 9126", "Satisfacción cliente"],
+    partial: "primer",
   },
   {
     id: 10,
@@ -181,6 +192,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Evans Cap 1",
     relatedConcepts: ["6 perspectivas Garvin", "Enfoques de calidad"],
+    partial: "primer",
   },
   {
     id: 11,
@@ -199,6 +211,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Perspectiva del usuario", "Funcionalidad"],
+    partial: "primer",
   },
   {
     id: 12,
@@ -217,6 +230,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Evans Cap 4",
     relatedConcepts: ["Expectativas", "Satisfacción", "Calidad percibida"],
+    partial: "primer",
   },
   {
     id: 13,
@@ -235,6 +249,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Pressman Cap 14",
     relatedConcepts: ["Calidad de software", "Valor", "Utilidad"],
+    partial: "primer",
   },
   {
     id: 14,
@@ -253,6 +268,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Valor", "Precio", "Relación calidad-precio"],
+    partial: "primer",
   },
   {
     id: 15,
@@ -271,6 +287,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Examen UNLaM 2024",
     relatedConcepts: ["Perspectivas cliente", "Expectativas"],
+    partial: "primer",
   },
   {
     id: 16,
@@ -289,6 +306,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Pressman Cap 14",
     relatedConcepts: ["Diseño", "Conformidad", "Especificaciones"],
+    partial: "primer",
   },
   {
     id: 17,
@@ -307,6 +325,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Trascendental", "Subjetividad", "Excelencia"],
+    partial: "primer",
   },
 
   // ============ CICLO PDCA (7 preguntas) ============
@@ -327,6 +346,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Deming", "Mejora continua", "PDCA"],
+    partial: "primer",
   },
   {
     id: 19,
@@ -345,6 +365,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Plan", "Objetivos", "Requisitos"],
+    partial: "primer",
   },
   {
     id: 20,
@@ -363,6 +384,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Examen UNLaM",
     relatedConcepts: ["Check", "Monitoreo", "Aprendizaje"],
+    partial: "primer",
   },
   {
     id: 21,
@@ -381,6 +403,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Act", "Mejora", "Decisiones"],
+    partial: "primer",
   },
   {
     id: 22,
@@ -399,6 +422,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Orden PDCA", "Ciclicidad", "Mejora continua"],
+    partial: "primer",
   },
   {
     id: 23,
@@ -417,6 +441,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Apunte 1",
     relatedConcepts: ["Ciclicidad", "Mejora incremental", "Continuidad"],
+    partial: "primer",
   },
   {
     id: 24,
@@ -435,6 +460,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Deming", "Historia de la calidad"],
+    partial: "primer",
   },
 
   // ============ ISO 9126 - CARACTERÍSTICAS (12 preguntas) ============
@@ -455,6 +481,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["ISO 9126", "6 características"],
+    partial: "primer",
   },
   {
     id: 48,
@@ -473,6 +500,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Funcionalidad", "Funciones", "Necesidades"],
+    partial: "primer",
   },
   {
     id: 49,
@@ -491,6 +519,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Confiabilidad", "Fallas", "Disponibilidad"],
+    partial: "primer",
   },
   {
     id: 50,
@@ -509,6 +538,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Nivel de Madurez", "Frecuencia de falla", "Defectos"],
+    partial: "primer",
   },
   {
     id: 51,
@@ -527,6 +557,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Usabilidad", "Interfaz", "Usuario"],
+    partial: "primer",
   },
   {
     id: 52,
@@ -545,6 +576,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Mantenibilidad", "Modificación", "Correcciones"],
+    partial: "primer",
   },
   {
     id: 53,
@@ -561,6 +593,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Mantenibilidad", "Modificación", "Verificación"],
+    partial: "primer",
   },
   {
     id: 54,
@@ -579,6 +612,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Eficiencia", "Performance", "Recursos"],
+    partial: "primer",
   },
   {
     id: 55,
@@ -597,6 +631,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Examen UNLaM",
     relatedConcepts: ["Eficiencia", "Tiempo", "Recursos"],
+    partial: "primer",
   },
   {
     id: 56,
@@ -615,6 +650,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Portabilidad", "Ambiente", "Transferencia"],
+    partial: "primer",
   },
   {
     id: 57,
@@ -631,6 +667,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Portabilidad", "Confiabilidad", "Sub-características"],
+    partial: "primer",
   },
   {
     id: 58,
@@ -649,6 +686,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Ejercicio Práctico",
     relatedConcepts: ["Priorización", "Contexto médico", "Criticidad"],
+    partial: "primer",
   },
 
   // ============ MÉTRICAS DE SOFTWARE (12 preguntas) ============
@@ -669,6 +707,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Fichas Miel",
     relatedConcepts: ["Definición de métricas", "Mediciones"],
+    partial: "primer",
   },
   {
     id: 60,
@@ -687,6 +726,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Fichas Miel",
     relatedConcepts: ["Métricas funcionales", "Indirectas"],
+    partial: "primer",
   },
   {
     id: 61,
@@ -705,6 +745,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Métricas de proceso", "Largo plazo", "Mejora"],
+    partial: "primer",
   },
   {
     id: 62,
@@ -723,6 +764,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Métricas de proyecto", "Tácticas", "Corto plazo"],
+    partial: "primer",
   },
   {
     id: 63,
@@ -741,6 +783,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Apunte 1",
     relatedConcepts: ["Medida", "Métrica", "Indicador"],
+    partial: "primer",
   },
   {
     id: 64,
@@ -759,6 +802,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Examen UNLaM",
     relatedConcepts: ["Métricas proceso", "Mejora", "Oportunidades"],
+    partial: "primer",
   },
   {
     id: 65,
@@ -777,6 +821,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Examen UNLaM",
     relatedConcepts: ["Esfuerzo", "Indirectas", "Estimación"],
+    partial: "primer",
   },
   {
     id: 66,
@@ -795,6 +840,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Examen UNLaM",
     relatedConcepts: ["Medición", "Decisiones", "Gestión"],
+    partial: "primer",
   },
   {
     id: 67,
@@ -813,6 +859,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Examen UNLaM",
     relatedConcepts: ["Madurez del proceso", "Mejora a largo plazo"],
+    partial: "primer",
   },
   {
     id: 68,
@@ -831,6 +878,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Clasificación", "Naturaleza de métricas"],
+    partial: "primer",
   },
   {
     id: 69,
@@ -849,6 +897,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Métricas básicas", "Medición directa"],
+    partial: "primer",
   },
   {
     id: 70,
@@ -867,6 +916,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Fichas Miel",
     relatedConcepts: ["Agregación", "Suma ponderada"],
+    partial: "primer",
   },
 
   // ============ PUNTOS DE FUNCIÓN - TEORÍA (6 preguntas) ============
@@ -887,6 +937,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["5 elementos PF", "Dominio de información"],
+    partial: "primer",
   },
   {
     id: 72,
@@ -905,6 +956,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["EE", "Entrada", "Input"],
+    partial: "primer",
   },
   {
     id: 73,
@@ -923,6 +975,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["SE", "Salida", "Output"],
+    partial: "primer",
   },
   {
     id: 74,
@@ -941,6 +994,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["CI", "Consulta", "Interactivo"],
+    partial: "primer",
   },
   {
     id: 75,
@@ -959,6 +1013,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Factores de ajuste", "14 factores", "Complejidad"],
+    partial: "primer",
   },
   {
     id: 76,
@@ -977,6 +1032,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Apunte 1",
     relatedConcepts: ["Factor ajuste", "Cálculo PF"],
+    partial: "primer",
   },
 
   // ============ PUNTOS DE FUNCIÓN - CÁLCULOS (8 preguntas) ============
@@ -997,6 +1053,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Cálculos",
     relatedConcepts: ["PFSA", "Cálculo"],
+    partial: "primer",
   },
   {
     id: 78,
@@ -1015,6 +1072,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Cálculos",
     relatedConcepts: ["Factor ajuste", "Cálculo"],
+    partial: "primer",
   },
   {
     id: 79,
@@ -1033,6 +1091,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Ejercicio Práctico",
     relatedConcepts: ["PF Ajustados", "Factor ajuste"],
+    partial: "primer",
   },
   {
     id: 80,
@@ -1051,6 +1110,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Ejercicio Práctico",
     relatedConcepts: ["LDC", "Conversión PF-LDC"],
+    partial: "primer",
   },
   {
     id: 81,
@@ -1069,6 +1129,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Ejercicio Práctico",
     relatedConcepts: ["Esfuerzo", "PERS-MES"],
+    partial: "primer",
   },
   {
     id: 82,
@@ -1087,6 +1148,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Ejercicio Práctico",
     relatedConcepts: ["Duración", "Personas"],
+    partial: "primer",
   },
   {
     id: 83,
@@ -1105,6 +1167,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Ejercicio Práctico",
     relatedConcepts: ["Costo total", "Presupuesto"],
+    partial: "primer",
   },
   {
     id: 84,
@@ -1123,6 +1186,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Ejercicio Práctico",
     relatedConcepts: ["Cumplimiento de plazos", "Análisis viabilidad"],
+    partial: "primer",
   },
 
   // ============ TRABAJO EN EQUIPO (5 preguntas) ============
@@ -1143,6 +1207,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["5 C", "Trabajo en equipo"],
+    partial: "primer",
   },
   {
     id: 86,
@@ -1161,6 +1226,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Complementariedad", "Habilidades", "Diversidad"],
+    partial: "primer",
   },
   {
     id: 87,
@@ -1179,6 +1245,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Grupo vs Equipo", "Sinergia"],
+    partial: "primer",
   },
   {
     id: 88,
@@ -1195,6 +1262,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Resolución de conflictos", "Liderazgo compartido"],
+    partial: "primer",
   },
   {
     id: 89,
@@ -1213,6 +1281,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Características", "Efectividad", "Cohesión"],
+    partial: "primer",
   },
 
   // ============ CLIENTES Y SATISFACCIÓN (5 preguntas) ============
@@ -1233,6 +1302,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["3 tipos clientes", "Segmentación"],
+    partial: "primer",
   },
   {
     id: 91,
@@ -1251,6 +1321,7 @@ export const questionsBank: Question[] = [
     difficulty: "easy",
     source: "Apunte 1",
     relatedConcepts: ["Cliente interno", "Interdependencia"],
+    partial: "primer",
   },
   {
     id: 92,
@@ -1269,6 +1340,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Evans Cap 4",
     relatedConcepts: ["Satisfacción", "Lealtad", "Cliente"],
+    partial: "primer",
   },
   {
     id: 93,
@@ -1287,6 +1359,7 @@ export const questionsBank: Question[] = [
     difficulty: "hard",
     source: "Apunte 1",
     relatedConcepts: ["ISO 9126", "Satisfacción", "Integridad"],
+    partial: "primer",
   },
   {
     id: 94,
@@ -1305,6 +1378,7 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Evans Cap 4",
     relatedConcepts: ["Segmentación", "Grupos", "Personalización"],
+    partial: "primer",
   },
 
   // ============ DECISIONES ORGANIZACIONALES (1 pregunta) ============
@@ -1325,7 +1399,14 @@ export const questionsBank: Question[] = [
     difficulty: "medium",
     source: "Apunte 1",
     relatedConcepts: ["Decisión", "Proceso racional", "Alternativas"],
+    partial: "primer",
   },
+];
+
+// Merge first and second partial questions
+export const questionsBank: Question[] = [
+  ...firstPartialQuestions,
+  ...secondPartialQuestionsBank,
 ];
 
 export function getRandomQuestions(count: number): Question[] {

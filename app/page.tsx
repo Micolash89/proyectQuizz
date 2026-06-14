@@ -1,19 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { FeedbackMode } from "@/types/quiz";
+import { questionsBank } from "@/data/questions";
 
 export default function Home() {
   const router = useRouter();
+  const [partial, setPartial] = useState<"primer" | "segundo">("primer");
   const [feedbackMode, setFeedbackMode] = useState<FeedbackMode>("end_only");
   const [questionCount, setQuestionCount] = useState<number>(25);
   const [loading, setLoading] = useState(false);
 
+  const totalAvailable = useMemo(() => {
+    return questionsBank.filter((q) => q.partial === partial).length;
+  }, [partial]);
+
+  const categoryCount = useMemo(() => {
+    const cats = new Set(
+      questionsBank.filter((q) => q.partial === partial).map((q) => q.category)
+    );
+    return cats.size;
+  }, [partial]);
+
   const handleStartQuiz = () => {
     setLoading(true);
-    router.push(`/quiz?feedback=${feedbackMode}&count=${questionCount}`);
+    const countParam = questionCount === 0 ? "todas" : String(questionCount);
+    router.push(`/quiz?feedback=${feedbackMode}&count=${countParam}&partial=${partial}`);
   };
+
+  const formatCountButton = (count: number) => {
+    if (count === 0) return `Todas (${totalAvailable})`;
+    return String(count);
+  };
+
+  const displayQuestionCount = questionCount === 0 ? totalAvailable : questionCount;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4">
@@ -23,23 +44,56 @@ export default function Home() {
           <h1 className="text-4xl md:text-5xl font-bold text-slate-100 mb-2">
             Quiz Calidad de Software
           </h1>
-          <p className="text-slate-400">Preparación para el primer parcial - UNLaM</p>
+          <p className="text-slate-400">
+            {partial === "primer" 
+              ? "Preparación para el Primer Parcial - UNLaM"
+              : "Preparación para el Segundo Parcial - UNLaM"}
+          </p>
         </div>
 
         {/* Main Card */}
         <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-8 mb-8">
+          {/* Partial Selection */}
+          <div className="mb-8 pb-8 border-b border-slate-700">
+            <h2 className="text-xl font-semibold text-slate-100 mb-4">Selecciona Parcial</h2>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setPartial("primer")}
+                className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                  partial === "primer"
+                    ? "bg-blue-600 text-white border-2 border-blue-400"
+                    : "bg-slate-700/50 text-slate-300 hover:bg-slate-700 border-2 border-slate-700"
+                }`}
+              >
+                Primer Parcial ({questionsBank.filter((q) => q.partial === "primer").length} preguntas)
+              </button>
+              <button
+                onClick={() => setPartial("segundo")}
+                className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                  partial === "segundo"
+                    ? "bg-purple-600 text-white border-2 border-purple-400"
+                    : "bg-slate-700/50 text-slate-300 hover:bg-slate-700 border-2 border-slate-700"
+                }`}
+              >
+                Segundo Parcial ({questionsBank.filter((q) => q.partial === "segundo").length} preguntas)
+              </button>
+            </div>
+          </div>
           {/* Quiz Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-1">{questionCount}</div>
+              <div className="text-3xl font-bold text-blue-400 mb-1">
+                {displayQuestionCount}
+                <span className="text-sm font-normal text-slate-400"> / {totalAvailable}</span>
+              </div>
               <div className="text-slate-300 text-sm">Preguntas</div>
             </div>
             <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-              <div className="text-3xl font-bold text-green-400 mb-1">~{Math.ceil((questionCount / 100) * 45)}</div>
+              <div className="text-3xl font-bold text-green-400 mb-1">~{Math.ceil((displayQuestionCount / 100) * 45)}</div>
               <div className="text-slate-300 text-sm">Minutos</div>
             </div>
             <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-              <div className="text-3xl font-bold text-purple-400 mb-1">16</div>
+              <div className="text-3xl font-bold text-purple-400 mb-1">{categoryCount}</div>
               <div className="text-slate-300 text-sm">Categorías</div>
             </div>
           </div>
@@ -47,39 +101,69 @@ export default function Home() {
           {/* Content Overview */}
           <div className="mb-8 pb-8 border-b border-slate-700">
             <h2 className="text-xl font-semibold text-slate-100 mb-4">Contenido</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
-              <div className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">•</span>
-                <span>Historia y evolución de la calidad</span>
+            {partial === "primer" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
+                <div className="flex items-start gap-2">
+                  <span className="text-blue-400 font-bold">•</span>
+                  <span>Historia y evolución de la calidad</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-blue-400 font-bold">•</span>
+                  <span>Definiciones y conceptos fundamentales</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-blue-400 font-bold">•</span>
+                  <span>Ciclo PDCA (Deming)</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-blue-400 font-bold">•</span>
+                  <span>Principios y herramientas de calidad</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-blue-400 font-bold">•</span>
+                  <span>ISO 9126 y métricas de software</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-blue-400 font-bold">•</span>
+                  <span>Puntos de función y análisis de casos</span>
+                </div>
               </div>
-              <div className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">•</span>
-                <span>Definiciones y conceptos fundamentales</span>
+            )}
+            {partial === "segundo" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-300">
+                <div className="flex items-start gap-2">
+                  <span className="text-purple-400 font-bold">•</span>
+                  <span>Riesgos en proyectos de software</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-purple-400 font-bold">•</span>
+                  <span>Costos asociados a la calidad</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-purple-400 font-bold">•</span>
+                  <span>Ciclo de Deming y mejora continua</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-purple-400 font-bold">•</span>
+                  <span>Accesibilidad en software</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-purple-400 font-bold">•</span>
+                  <span>Evaluación heurística</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-purple-400 font-bold">•</span>
+                  <span>Testing y aseguramiento de calidad</span>
+                </div>
               </div>
-              <div className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">•</span>
-                <span>Ciclo PDCA (Deming)</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">•</span>
-                <span>Principios y herramientas de calidad</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">•</span>
-                <span>ISO 9126 y métricas de software</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-blue-400 font-bold">•</span>
-                <span>Puntos de función y análisis de casos</span>
-              </div>
-            </div>
+            )}
           </div>
 
            {/* Question Count Selection */}
            <div className="mb-8">
              <h2 className="text-xl font-semibold text-slate-100 mb-4">Cantidad de Preguntas</h2>
-             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-               {[15, 25, 50].map((count) => (
+             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+               {[15, 25, 50, 0].map((count) => (
                 <button
                   key={count}
                   onClick={() => setQuestionCount(count)}
@@ -89,7 +173,7 @@ export default function Home() {
                       : "bg-slate-700/50 text-slate-300 hover:bg-slate-700 border-2 border-slate-700"
                   }`}
                 >
-                  {count}
+                  {formatCountButton(count)}
                 </button>
               ))}
             </div>
@@ -160,7 +244,9 @@ export default function Home() {
             ✓ Retroalimentación completa
           </p>
           <p>
-            Basado en los apuntes de la cátedra - Primer Parcial Calidad de Software
+            {partial === "primer"
+              ? "Basado en los apuntes de la cátedra - Primer Parcial Calidad de Software"
+              : "Basado en los apuntes de la cátedra - Segundo Parcial Calidad de Software"}
           </p>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { useEffect, useState } from "react";
-import { QuizResult } from "@/types/quiz";
+import { QuizResult, Partial } from "@/types/quiz";
 import { questionsBank } from "@/data/questions";
 import { ResultsTable } from "@/components/ResultsTable";
 
@@ -12,9 +12,10 @@ function ResultsPageContent() {
   const router = useRouter();
   const [results, setResults] = useState<QuizResult | null>(null);
 
-  // Get feedback and count from query params with fallbacks
+  // Get feedback, count and partial from query params with fallbacks
   const feedback = searchParams.get("feedback") || "end_only";
   const count = searchParams.get("count") || "25";
+  const partial = (searchParams.get("partial") as Partial) || "primer";
 
   useEffect(() => {
     const data = searchParams.get("data");
@@ -65,7 +66,7 @@ function ResultsPageContent() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <h1 className="text-3xl font-bold text-slate-100 mb-8 text-center">
-          📊 Resultados del Quiz
+          📊 Resultados del Quiz - {partial === "primer" ? "Primer Parcial" : "Segundo Parcial"}
         </h1>
 
         {/* Main Score Card */}
@@ -209,7 +210,7 @@ function ResultsPageContent() {
             ← Volver al Inicio
           </button>
           <button
-            onClick={() => router.push(`/quiz?feedback=${feedback}&count=${count}`)}
+            onClick={() => router.push(`/quiz?feedback=${feedback}&count=${count}&partial=${partial}`)}
             className="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold transition"
           >
             🔄 Reintentar Quiz
@@ -221,10 +222,16 @@ function ResultsPageContent() {
           <h3 className="text-lg font-semibold text-slate-100 mb-4">💡 Recomendaciones</h3>
           <p className="text-slate-300 leading-relaxed">
             {results.percentage >= 80
-              ? "¡Excelente desempeño! Dominas muy bien los temas del primer parcial. Estás listo para el examen. Continúa repasando los conceptos claves y practica con más casos."
+              ? partial === "primer"
+                ? "¡Excelente desempeño! Dominas muy bien los temas del primer parcial. Estás listo para el examen. Continúa repasando los conceptos claves."
+                : "¡Excelente desempeño! Dominas muy bien los temas del segundo parcial. Estás bien preparado para el examen final. Sigue reforzando tus conocimientos."
               : results.percentage >= 60
-                ? "Buen trabajo, pero hay áreas que necesitas reforzar. Revisa las preguntas que fallaste, especialmente en las categorías con menor porcentaje. Repasa los conceptos teóricos antes del examen."
-                : "Necesitas más estudio. Revisa cuidadosamente los temas donde fallaste. Repasa los apuntes, particularmente historia, definiciones y características ISO 9126. Practica más casos prácticos."}
+                ? partial === "primer"
+                  ? "Buen trabajo en el primer parcial, pero hay áreas que necesitas reforzar. Revisa las preguntas que fallaste, especialmente en categorías con menor porcentaje."
+                  : "Buen trabajo en el segundo parcial, pero hay temas que necesitas profundizar. Revisa especialmente Riesgos, Costos de Calidad y Testing."
+                : partial === "primer"
+                  ? "Necesitas más estudio del primer parcial. Revisa cuidadosamente: Historia de Calidad, Definiciones fundamentales, ISO 9126. Practica más cálculos de Puntos de Función."
+                  : "Necesitas reforzar el segundo parcial. Enfócate en: Gestión de Riesgos, Costos asociados a Calidad, Ciclo de Deming, Evaluación Heurística y Estrategias de Testing."}
           </p>
         </div>
       </div>

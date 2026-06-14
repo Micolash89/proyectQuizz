@@ -28,6 +28,13 @@ export function ResultsTable({ results, allQuestions }: ResultsTableProps) {
     }
   };
 
+  const formatAnswer = (answer: string | string[]): string => {
+    if (Array.isArray(answer)) {
+      return answer.join(", ");
+    }
+    return answer;
+  };
+
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full text-sm">
@@ -45,8 +52,8 @@ export function ResultsTable({ results, allQuestions }: ResultsTableProps) {
           {results.map((result, index) => (
             <tr key={result.questionId} className="border-b border-slate-700 hover:bg-slate-800/30">
               <td className="px-4 py-3 text-slate-400">{index + 1}</td>
-              <td className="px-4 py-3 text-slate-300">{result.selectedAnswer}</td>
-              <td className="px-4 py-3 text-slate-300">{result.correctAnswer}</td>
+              <td className="px-4 py-3 text-slate-300">{formatAnswer(result.selectedAnswer)}</td>
+              <td className="px-4 py-3 text-slate-300">{formatAnswer(result.correctAnswer)}</td>
               <td className="px-4 py-3">
                 <span
                   className={`${result.isCorrect ? "text-green-400" : "text-red-400"} font-semibold`}
