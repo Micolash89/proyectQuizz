@@ -27,7 +27,7 @@ export function QuestionCard({
   showFeedback,
   feedbackAnswer,
 }: QuestionCardProps) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   
   // Determine if this is a multi-answer question
   const isMultiAnswer = Array.isArray(question.correctAnswer);
@@ -98,6 +98,39 @@ export function QuestionCard({
     }
   };
 
+  const isCorrectOption = (letter: string): boolean => {
+    if (Array.isArray(question.correctAnswer)) {
+      return question.correctAnswer.includes(letter);
+    }
+    return question.correctAnswer === letter;
+  };
+
+  const isUserWrongSelection = (letter: string): boolean => {
+    if (!showFeedback || feedbackAnswer?.isCorrect) return false;
+    if (Array.isArray(selectedAnswer)) {
+      return selectedAnswer.includes(letter) && !isCorrectOption(letter);
+    }
+    return selectedAnswer === letter && !isCorrectOption(letter);
+  };
+
+  const getOptionStyle = (letter: string) => {
+    if (!showFeedback) {
+      const isSelected = Array.isArray(selectedAnswer)
+        ? selectedAnswer.includes(letter)
+        : selectedAnswer === letter;
+      return isSelected
+        ? "border-blue-500 bg-blue-900/20 text-slate-100"
+        : "border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500";
+    }
+    if (isCorrectOption(letter)) {
+      return "border-green-500 bg-green-900/30 text-green-300";
+    }
+    if (isUserWrongSelection(letter)) {
+      return "border-red-500 bg-red-900/30 text-red-300";
+    }
+    return "border-slate-600 bg-slate-800/50 text-slate-300 opacity-60";
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
       {/* Header */}
@@ -146,12 +179,14 @@ export function QuestionCard({
                 key={option.letter}
                 onClick={() => !hasAnswered && onSelect(option.letter)}
                 disabled={hasAnswered}
-                className={`w-full text-left p-4 rounded border-2 transition ${
-                  selectedAnswer === option.letter
-                    ? "border-blue-500 bg-blue-900/20 text-slate-100"
-                    : "border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500"
-                } ${hasAnswered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-700/50 cursor-pointer"}`}
+                className={`w-full text-left p-4 rounded border-2 transition ${getOptionStyle(option.letter)} ${hasAnswered ? "cursor-not-allowed" : "hover:bg-slate-700/50 cursor-pointer"}`}
               >
+                {showFeedback && isCorrectOption(option.letter) && (
+                  <span className="mr-2 text-green-400 font-bold">✓</span>
+                )}
+                {showFeedback && isUserWrongSelection(option.letter) && (
+                  <span className="mr-2 text-red-400 font-bold">✗</span>
+                )}
                 <span className="font-semibold">{option.letter})</span> {option.text}
               </button>
             ))}
@@ -165,12 +200,14 @@ export function QuestionCard({
                 key={option.letter}
                 onClick={() => !hasAnswered && onSelect(option.letter)}
                 disabled={hasAnswered}
-                className={`w-full text-left p-4 rounded border-2 transition ${
-                  selectedAnswer === option.letter
-                    ? "border-blue-500 bg-blue-900/20 text-slate-100"
-                    : "border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500"
-                } ${hasAnswered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-700/50 cursor-pointer"}`}
+                className={`w-full text-left p-4 rounded border-2 transition ${getOptionStyle(option.letter)} ${hasAnswered ? "cursor-not-allowed" : "hover:bg-slate-700/50 cursor-pointer"}`}
               >
+                {showFeedback && isCorrectOption(option.letter) && (
+                  <span className="mr-2 text-green-400 font-bold">✓</span>
+                )}
+                {showFeedback && isUserWrongSelection(option.letter) && (
+                  <span className="mr-2 text-red-400 font-bold">✗</span>
+                )}
                 <span className="font-semibold">{option.letter})</span> {option.text}
               </button>
             ))}
@@ -183,19 +220,23 @@ export function QuestionCard({
               {question.options.map((option) => (
                 <label
                   key={option.letter}
-                  className={`flex items-start p-4 rounded border-2 cursor-pointer transition ${
-                    selectedCheckboxes.has(option.letter)
-                      ? "border-blue-500 bg-blue-900/20 text-slate-100"
-                      : "border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500"
-                  } ${hasAnswered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-700/50"}`}
+                  className={`flex items-start p-4 rounded border-2 cursor-pointer transition ${getOptionStyle(option.letter)} ${hasAnswered ? "cursor-not-allowed" : "hover:bg-slate-700/50"}`}
                 >
-                  <input
-                    type="checkbox"
-                    checked={selectedCheckboxes.has(option.letter)}
-                    onChange={() => handleCheckboxChange(option.letter)}
-                    disabled={hasAnswered}
-                    className="mt-1 mr-3 cursor-pointer"
-                  />
+                  {showFeedback && isCorrectOption(option.letter) && (
+                    <span className="mr-2 mt-0.5 text-green-400 font-bold">✓</span>
+                  )}
+                  {showFeedback && isUserWrongSelection(option.letter) && (
+                    <span className="mr-2 mt-0.5 text-red-400 font-bold">✗</span>
+                  )}
+                  {!showFeedback && (
+                    <input
+                      type="checkbox"
+                      checked={selectedCheckboxes.has(option.letter)}
+                      onChange={() => handleCheckboxChange(option.letter)}
+                      disabled={hasAnswered}
+                      className="mt-1 mr-3 cursor-pointer"
+                    />
+                  )}
                   <span>
                     <span className="font-semibold">{option.letter})</span> {option.text}
                   </span>

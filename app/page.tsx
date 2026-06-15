@@ -8,7 +8,7 @@ import { questionsBank } from "@/data/questions";
 export default function Home() {
   const router = useRouter();
   const [partial, setPartial] = useState<"primer" | "segundo">("primer");
-  const [feedbackMode, setFeedbackMode] = useState<FeedbackMode>("end_only");
+  const [feedbackMode, setFeedbackMode] = useState<FeedbackMode>("immediate");
   const [questionCount, setQuestionCount] = useState<number>(25);
   const [loading, setLoading] = useState(false);
 
