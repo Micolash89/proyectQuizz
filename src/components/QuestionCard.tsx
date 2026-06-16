@@ -1,7 +1,7 @@
 "use client";
 
 import { Question } from "@/types/quiz";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface QuestionCardProps {
   question: Question;
@@ -38,6 +38,11 @@ export function QuestionCard({
       ? new Set(selectedAnswer)
       : new Set()
   );
+
+  // Reset checkboxes when question changes
+  useEffect(() => {
+    setSelectedCheckboxes(new Set());
+  }, [question.id]);
 
   const getDifficultyColor = () => {
     switch (question.difficulty) {
