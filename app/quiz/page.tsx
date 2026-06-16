@@ -68,7 +68,8 @@ function QuizPageContent() {
 
   const handleFinish = () => {
     const results = calculateResults();
-    router.push(`/results?data=${btoa(JSON.stringify(results))}&feedback=${feedbackMode}&count=${questionCount}&partial=${partialParam}`);
+    sessionStorage.setItem("quizResults", JSON.stringify(results));
+    router.push(`/results?feedback=${feedbackMode}&count=${questionCount}&partial=${partialParam}`);
   };
 
   if (!currentQuestion) {

@@ -18,17 +18,20 @@ function ResultsPageContent() {
   const partial = (searchParams.get("partial") as Partial) || "primer";
 
   useEffect(() => {
-    const data = searchParams.get("data");
+    const data = sessionStorage.getItem("quizResults");
     if (data) {
       try {
-        const decoded = JSON.parse(atob(data));
+        const decoded = JSON.parse(data);
         setResults(decoded);
+        sessionStorage.removeItem("quizResults");
       } catch (e) {
         console.error("Error decoding results:", e);
         router.push("/");
       }
+    } else {
+      router.push("/");
     }
-  }, [searchParams, router]);
+  }, [router]);
 
   if (!results) {
     return (
