@@ -16,7 +16,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "Durante la Revolución Industrial, la función de inspección se convierte en elemento fundamental del proceso productivo. El operario realiza la inspección identificando productos que no se ajustan a los estándares deseados. Fuente: Apunte 1 - Historia de la Calidad.",
+      "Durante la Revolución Industrial, la función de inspección se convierte en elemento fundamental del proceso productivo. El operario realiza la inspección identificando productos que no se ajustan a los estándares deseados.",
     category: "historia",
     difficulty: "easy",
     source: "Apunte 1",
@@ -35,7 +35,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "En la posguerra (Aseguramiento de Calidad), Japón desarrolla técnicas dedicadas a la fiabilidad y la calidad empieza a verse de forma sistémica como responsabilidad colectiva. Se crean estrategias PREVENTIVAS, no correctivas. Fuente: Fichas Miel - Clase 2.",
+      "En la posguerra (Aseguramiento de Calidad), Japón desarrolla técnicas dedicadas a la fiabilidad y la calidad empieza a verse de forma sistémica como responsabilidad colectiva. Se crean estrategias PREVENTIVAS, no correctivas.",
     category: "historia",
     difficulty: "medium",
     source: "Fichas Miel",
@@ -52,7 +52,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "FALSO. El concepto de calidad ha EVOLUCIONADO significativamente. Pasó desde Inspección (postproducción) → Control Estadístico → Aseguramiento (preventivo) → Calidad Total → Mejora Continua. La visión ha cambiado de 'detectar defectos' a 'prevenir defectos' y 'mejora continua'. Fuente: Apunte 1.",
+      "FALSO. El concepto de calidad ha EVOLUCIONADO significativamente. Pasó desde Inspección (postproducción) → Control Estadístico → Aseguramiento (preventivo) → Calidad Total → Mejora Continua. La visión ha cambiado de 'detectar defectos' a 'prevenir defectos' y 'mejora continua'.",
     category: "historia",
     difficulty: "medium",
     source: "Apunte 1",
@@ -71,7 +71,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "Pese a que el control de calidad se inició con la inspección, en la Segunda Guerra Mundial se pasó a la PREVENCIÓN usando criterios y herramientas estadísticas para controlar factores del proceso que ocasionaban defectos. Fuente: Apunte 1.",
+      "Pese a que el control de calidad se inició con la inspección, en la Segunda Guerra Mundial se pasó a la PREVENCIÓN usando criterios y herramientas estadísticas para controlar factores del proceso que ocasionaban defectos.",
     category: "historia",
     difficulty: "easy",
     source: "Apunte 1",
@@ -90,7 +90,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "La etapa actual se caracteriza por un proceso continuo de reducción de costos donde el factor humano cumple rol importante. Ha desarrollado habilidades para trabajar en equipo y resolver problemas de forma continua. Fuente: Apunte 1 - Etapa Actual.",
+      "La etapa actual se caracteriza por un proceso continuo de reducción de costos donde el factor humano cumple rol importante. Ha desarrollado habilidades para trabajar en equipo y resolver problemas de forma continua.",
     category: "historia",
     difficulty: "medium",
     source: "Apunte 1",
@@ -109,7 +109,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "A inicios de 1900, con Taylor, nos encontramos en la etapa de Revolución Industrial/Inspección. Su filosofía separaba planificación (administradores) de ejecución (obreros), característico de esta etapa. Fuente: Examen Teórico UNLaM 2024.",
+      "A inicios de 1900, con Taylor, nos encontramos en la etapa de Revolución Industrial/Inspección. Su filosofía separaba planificación (administradores) de ejecución (obreros), característico de esta etapa.",
     category: "historia",
     difficulty: "hard",
     source: "Examen UNLaM 2024",
@@ -128,7 +128,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "En la posguerra (Aseguramiento de Calidad), se crea ISO (Organización Internacional de Normalización) para coordinar normas internacionales. ISO 9000/9001 aseguran consistencia y mejora continua global. Fuente: Fichas Miel - Normalización.",
+      "En la posguerra (Aseguramiento de Calidad), se crea ISO (Organización Internacional de Normalización) para coordinar normas internacionales. ISO 9000/9001 aseguran consistencia y mejora continua global.",
     category: "historia",
     difficulty: "hard",
     source: "Fichas Miel",
@@ -147,7 +147,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "La inspección intentaba identificar productos defectuosos DESPUÉS de producidos para que no llegaran al cliente. Pero esto era reactivo, no preventivo. Solo se detectaban defectos, no se evitaba su origen. Fuente: Apunte 1.",
+      "La inspección intentaba identificar productos defectuosos DESPUÉS de producidos para que no llegaran al cliente. Pero esto era reactivo, no preventivo. Solo se detectaban defectos, no se evitaba su origen.",
     category: "historia",
     difficulty: "medium",
     source: "Apunte 1",
@@ -168,7 +168,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Según ISO 9126, la calidad se define como 'el grado en que un conjunto de características inherentes de un objeto cumple con los requisitos'. Esta definición enfatiza que satisface NECESIDADES del cliente. Fuente: Apunte 5 Recomendado.",
+      "Según ISO 9126, la calidad se define como 'el grado en que un conjunto de características inherentes de un objeto cumple con los requisitos'. Esta definición enfatiza que satisface NECESIDADES del cliente.",
     category: "definiciones",
     difficulty: "easy",
     source: "Apunte 5",
@@ -187,7 +187,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "D",
     justification:
-      "David Garvin propone 6 perspectivas: (1) Trascendental, (2) Usuario, (3) Fabricante, (4) Producto, (5) Valor y (6) Cliente. Cada una ofrece una visión diferente y complementaria. Fuente: Evans Cap 1 y Apunte 1.",
+      "David Garvin propone 6 perspectivas: (1) Trascendental, (2) Usuario, (3) Fabricante, (4) Producto, (5) Valor y (6) Cliente. Cada una ofrece una visión diferente y complementaria.",
     category: "definiciones",
     difficulty: "easy",
     source: "Evans Cap 1",
@@ -206,7 +206,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "La perspectiva del USUARIO define calidad como 'adaptación a un propósito' - el producto debe servir para lo que fue diseñado. El cliente es quien determina si cumple su función. Fuente: Apunte 1 - Visiones de la Calidad.",
+      "La perspectiva del USUARIO define calidad como 'adaptación a un propósito' - el producto debe servir para lo que fue diseñado. El cliente es quien determina si cumple su función.",
     category: "definiciones",
     difficulty: "easy",
     source: "Apunte 1",
@@ -225,7 +225,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Calidad esperada es lo que el cliente SUPONE que recibirá (expectativas). Calidad real es lo que EFECTIVAMENTE recibe. Si la real supera la esperada: satisfacción. Si es menor: insatisfacción. Fuente: Evans Cap 4 - Satisfacción del Cliente.",
+      "Calidad esperada es lo que el cliente SUPONE que recibirá (expectativas). Calidad real es lo que EFECTIVAMENTE recibe. Si la real supera la esperada: satisfacción. Si es menor: insatisfacción.",
     category: "definiciones",
     difficulty: "medium",
     source: "Evans Cap 4",
@@ -244,7 +244,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Pressman define calidad de software como 'proceso eficaz que crea un producto útil que proporciona valor medible a quienes lo producen y utilizan'. Esto va más allá de solo especificaciones. Fuente: Pressman Cap 14.",
+      "Pressman define calidad de software como 'proceso eficaz que crea un producto útil que proporciona valor medible a quienes lo producen y utilizan'. Esto va más allá de solo especificaciones.",
     category: "definiciones",
     difficulty: "medium",
     source: "Pressman Cap 14",
@@ -263,7 +263,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "La perspectiva del VALOR define: 'La calidad depende de lo que el cliente esté dispuesto a pagar'. Un producto de calidad es aquel que es tan útil como competidores pero a menor precio, o mayor utilidad a precio comparable. Fuente: Apunte 1.",
+      "La perspectiva del VALOR define: 'La calidad depende de lo que el cliente esté dispuesto a pagar'. Un producto de calidad es aquel que es tan útil como competidores pero a menor precio, o mayor utilidad a precio comparable.",
     category: "definiciones",
     difficulty: "easy",
     source: "Apunte 1",
@@ -282,7 +282,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "El cliente ve calidad desde: (1) Usuario (¿sirve para mi propósito?), (2) Valor (¿es justo el precio?), (3) Cliente (¿satisface mis expectativas?). Fuente: Examen UNLaM 2024.",
+      "El cliente ve calidad desde: (1) Usuario (¿sirve para mi propósito?), (2) Valor (¿es justo el precio?), (3) Cliente (¿satisface mis expectativas?).",
     category: "definiciones",
     difficulty: "hard",
     source: "Examen UNLaM 2024",
@@ -301,7 +301,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Calidad de DISEÑO = las características que diseñadores especifican. Calidad de CONFORMIDAD = si el producto CUMPLE esas especificaciones. Un buen diseño con mala conformidad = cliente insatisfecho. Fuente: Pressman Cap 14.",
+      "Calidad de DISEÑO = las características que diseñadores especifican. Calidad de CONFORMIDAD = si el producto CUMPLE esas especificaciones. Un buen diseño con mala conformidad = cliente insatisfecho.",
     category: "definiciones",
     difficulty: "hard",
     source: "Pressman Cap 14",
@@ -320,7 +320,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "La perspectiva TRASCENDENTAL: 'La calidad es algo que podemos reconocer al verlo, pero no podemos definir'. Es abstracta y subjetiva. 'Lo sé cuando lo veo' (I know it when I see it). Fuente: Apunte 1.",
+      "La perspectiva TRASCENDENTAL: 'La calidad es algo que podemos reconocer al verlo, pero no podemos definir'. Es abstracta y subjetiva. 'Lo sé cuando lo veo' (I know it when I see it).",
     category: "definiciones",
     difficulty: "medium",
     source: "Apunte 1",
@@ -341,7 +341,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "El Ciclo PDCA (Plan-Do-Check-Act) consta de: P=Planificar (objetivos), D=Hacer (implementar), C=Verificar (seguimiento), A=Actuar (mejora). Es el corazón de la mejora continua. Fuente: Apunte 1.",
+      "El Ciclo PDCA (Plan-Do-Check-Act) consta de: P=Planificar (objetivos), D=Hacer (implementar), C=Verificar (seguimiento), A=Actuar (mejora). Es el corazón de la mejora continua.",
     category: "pdca",
     difficulty: "easy",
     source: "Apunte 1",
@@ -360,7 +360,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "La fase PLAN (Planificar) consiste en: 'Establecer objetivos y procesos según requisitos'. Define qué se va a hacer, cómo y con qué recursos. Fuente: Apunte 1 - PDCA.",
+      "La fase PLAN (Planificar) consiste en: 'Establecer objetivos y procesos según requisitos'. Define qué se va a hacer, cómo y con qué recursos.",
     category: "pdca",
     difficulty: "easy",
     source: "Apunte 1",
@@ -379,7 +379,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "La fase CHECK (Verificar) consiste en: 'Comparar resultados con objetivos, seguimiento a procesos y requisitos, y aprender del resultado'. Es monitoreo y análisis. Fuente: Examen UNLaM.",
+      "La fase CHECK (Verificar) consiste en: 'Comparar resultados con objetivos, seguimiento a procesos y requisitos, y aprender del resultado'. Es monitoreo y análisis.",
     category: "pdca",
     difficulty: "medium",
     source: "Examen UNLaM",
@@ -398,7 +398,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "D",
     justification:
-      "La fase ACT (Actuar) significa: 'Tomar decisiones para mejorar continuamente' basadas en los resultados del CHECK. Cierra el ciclo e inicia mejoras. Fuente: Apunte 1.",
+      "La fase ACT (Actuar) significa: 'Tomar decisiones para mejorar continuamente' basadas en los resultados del CHECK. Cierra el ciclo e inicia mejoras.",
     category: "pdca",
     difficulty: "medium",
     source: "Apunte 1",
@@ -417,7 +417,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "El orden CORRECTO es: PLAN (planificar) → DO (hacer) → CHECK (verificar) → ACT (actuar) → y vuelta a PLAN. Es un ciclo continuo de mejora. Fuente: Apunte 1.",
+      "El orden CORRECTO es: PLAN (planificar) → DO (hacer) → CHECK (verificar) → ACT (actuar) → y vuelta a PLAN. Es un ciclo continuo de mejora.",
     category: "pdca",
     difficulty: "easy",
     source: "Apunte 1",
@@ -436,7 +436,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "El PDCA es CÍCLICO. No se ejecuta una vez; se repite continuamente (Plan → Do → Check → Act → Plan...). Cada ciclo genera aprendizajes y mejoras incrementales. Fuente: Apunte 1 - Ciclo Deming.",
+      "El PDCA es CÍCLICO. No se ejecuta una vez; se repite continuamente (Plan → Do → Check → Act → Plan...). Cada ciclo genera aprendizajes y mejoras incrementales.",
     category: "pdca",
     difficulty: "hard",
     source: "Apunte 1",
@@ -455,7 +455,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "William DEMING popularizó el ciclo PDCA (también llamado Ciclo de Deming). Fue fundamental en la transformación de la calidad en Japón post-IIGM. Fuente: Apunte 1.",
+      "William DEMING popularizó el ciclo PDCA (también llamado Ciclo de Deming). Fue fundamental en la transformación de la calidad en Japón post-IIGM.",
     category: "pdca",
     difficulty: "easy",
     source: "Apunte 1",
@@ -476,7 +476,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "ISO 9126 establece 6 características fundamentales: (1) Funcionalidad, (2) Confiabilidad, (3) Usabilidad, (4) Eficiencia, (5) Mantenibilidad, (6) Portabilidad. Cada una tiene sub-características. Fuente: Apunte 1.",
+      "ISO 9126 establece 6 características fundamentales: (1) Funcionalidad, (2) Confiabilidad, (3) Usabilidad, (4) Eficiencia, (5) Mantenibilidad, (6) Portabilidad. Cada una tiene sub-características.",
     category: "iso9126",
     difficulty: "easy",
     source: "Apunte 1",
@@ -495,7 +495,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "FUNCIONALIDAD evalúa si el software maneja adecuadamente el conjunto de funciones que satisfacen necesidades. Sub-características: Adecuación, Exactitud, Interoperabilidad, Conformidad, Seguridad. Fuente: Apunte 1.",
+      "FUNCIONALIDAD evalúa si el software maneja adecuadamente el conjunto de funciones que satisfacen necesidades. Sub-características: Adecuación, Exactitud, Interoperabilidad, Conformidad, Seguridad.",
     category: "iso9126",
     difficulty: "easy",
     source: "Apunte 1",
@@ -514,7 +514,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "CONFIABILIDAD mide capacidad de mantener nivel de ejecución bajo condiciones normales en período establecido. Sub-características: Madurez (frecuencia de falla), Tolerancia a fallas, Recuperación. Fuente: Apunte 1.",
+      "CONFIABILIDAD mide capacidad de mantener nivel de ejecución bajo condiciones normales en período establecido. Sub-características: Madurez (frecuencia de falla), Tolerancia a fallas, Recuperación.",
     category: "iso9126",
     difficulty: "easy",
     source: "Apunte 1",
@@ -533,7 +533,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "NIVEL DE MADUREZ (sub-característica de Confiabilidad) mide FRECUENCIA DE FALLA por errores en software. Está directamente relacionada con defectos encontrados. Fuente: Apunte 1.",
+      "NIVEL DE MADUREZ (sub-característica de Confiabilidad) mide FRECUENCIA DE FALLA por errores en software. Está directamente relacionada con defectos encontrados.",
     category: "iso9126",
     difficulty: "medium",
     source: "Apunte 1",
@@ -552,7 +552,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "USABILIDAD evalúa ESFUERZO necesario para que usuario utilice sistema. Sub-características: Comprensibilidad (reconocer estructura), Facilidad de aprender, Operabilidad (operación y control). Fuente: Apunte 1.",
+      "USABILIDAD evalúa ESFUERZO necesario para que usuario utilice sistema. Sub-características: Comprensibilidad (reconocer estructura), Facilidad de aprender, Operabilidad (operación y control).",
     category: "iso9126",
     difficulty: "easy",
     source: "Apunte 1",
@@ -571,7 +571,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "MANTENIBILIDAD mide esfuerzo necesario para MODIFICACIONES (correcciones o incremento funcionalidad). Sub-características: Capacidad análisis, Capacidad modificación, Estabilidad, Facilidad prueba. Fuente: Apunte 1.",
+      "MANTENIBILIDAD mide esfuerzo necesario para MODIFICACIONES (correcciones o incremento funcionalidad). Sub-características: Capacidad análisis, Capacidad modificación, Estabilidad, Facilidad prueba.",
     category: "iso9126",
     difficulty: "easy",
     source: "Apunte 1",
@@ -588,7 +588,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "VERDADERO. Mantenibilidad evalúa esfuerzo para modificaciones (errores o funcionalidad) Y para verificar esas modificaciones. Incluye estabilidad y facilidad de prueba. Fuente: Apunte 1.",
+      "VERDADERO. Mantenibilidad evalúa esfuerzo para modificaciones (errores o funcionalidad) Y para verificar esas modificaciones. Incluye estabilidad y facilidad de prueba.",
     category: "iso9126",
     difficulty: "easy",
     source: "Apunte 1",
@@ -607,7 +607,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "EFICIENCIA mide relación entre FUNCIONAMIENTO del software y RECURSOS usados. Sub-características: Comportamiento respecto a Tiempo (tiempos respuesta, procesamiento), Comportamiento respecto Recursos (cantidad usada, duración). Fuente: Apunte 1.",
+      "EFICIENCIA mide relación entre FUNCIONAMIENTO del software y RECURSOS usados. Sub-características: Comportamiento respecto a Tiempo (tiempos respuesta, procesamiento), Comportamiento respecto Recursos (cantidad usada, duración).",
     category: "iso9126",
     difficulty: "medium",
     source: "Apunte 1",
@@ -626,7 +626,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "EFICIENCIA mide: (1) Tiempo de respuesta y procesamiento de datos, (2) Cantidad de recursos usados y duración de uso. Focus: performance y optimización. Fuente: Examen UNLaM.",
+      "EFICIENCIA mide: (1) Tiempo de respuesta y procesamiento de datos, (2) Cantidad de recursos usados y duración de uso. Focus: performance y optimización.",
     category: "iso9126",
     difficulty: "easy",
     source: "Examen UNLaM",
@@ -645,7 +645,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "PORTABILIDAD evalúa habilidad de software transferirse entre ambientes. Sub-características: Adaptabilidad (adaptar sin modificaciones), Facilidad Instalación, Conformidad (estándares portabilidad), Capacidad reemplazo. Fuente: Apunte 1.",
+      "PORTABILIDAD evalúa habilidad de software transferirse entre ambientes. Sub-características: Adaptabilidad (adaptar sin modificaciones), Facilidad Instalación, Conformidad (estándares portabilidad), Capacidad reemplazo.",
     category: "iso9126",
     difficulty: "easy",
     source: "Apunte 1",
@@ -662,7 +662,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "FALSO. 'Nivel de Madurez' y 'Recuperación' son sub-características de CONFIABILIDAD, no de Portabilidad. Portabilidad tiene: Adaptabilidad, Facilidad Instalación, Conformidad, Capacidad reemplazo. Fuente: Apunte 1.",
+      "FALSO. 'Nivel de Madurez' y 'Recuperación' son sub-características de CONFIABILIDAD, no de Portabilidad. Portabilidad tiene: Adaptabilidad, Facilidad Instalación, Conformidad, Capacidad reemplazo.",
     category: "iso9126",
     difficulty: "medium",
     source: "Apunte 1",
@@ -681,7 +681,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "Para Monitor Cardíaco: CONFIABILIDAD es crítica (errores pueden ser fatales), FUNCIONALIDAD (debe medir frecuencia correctamente), USABILIDAD (personal técnico), EFICIENCIA, MANTENIBILIDAD, PORTABILIDAD. Fuente: Caso Práctico - Ejercicio 1.",
+      "Para Monitor Cardíaco: CONFIABILIDAD es crítica (errores pueden ser fatales), FUNCIONALIDAD (debe medir frecuencia correctamente), USABILIDAD (personal técnico), EFICIENCIA, MANTENIBILIDAD, PORTABILIDAD.",
     category: "iso9126",
     difficulty: "hard",
     source: "Ejercicio Práctico",
@@ -702,7 +702,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Métricas Software = 'Aplicación continua de técnicas basadas en mediciones de procesos de desarrollo y productos, para producir información de gestión significativa y a tiempo'. Fuente: Fichas Miel - Clase 4.",
+      "Métricas Software = 'Aplicación continua de técnicas basadas en mediciones de procesos de desarrollo y productos, para producir información de gestión significativa y a tiempo'.",
     category: "metricas",
     difficulty: "easy",
     source: "Fichas Miel",
@@ -721,7 +721,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Métricas orientadas a FUNCIÓN = Medición INDIRECTA del software y proceso. Evalúan funcionalidad entregada SIN importar tecnología usada (e.g., Puntos de Función). Fuente: Fichas Miel - Clase 4.",
+      "Métricas orientadas a FUNCIÓN = Medición INDIRECTA del software y proceso. Evalúan funcionalidad entregada SIN importar tecnología usada (e.g., Puntos de Función).",
     category: "metricas",
     difficulty: "medium",
     source: "Fichas Miel",
@@ -740,7 +740,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "Métricas de PROCESO = Propósito ESTRATÉGICO: mejorar proceso a largo plazo con datos históricos. Se recopilan de TODOS los proyectos, durante LARGO TIEMPO. Fuente: Apunte 1.",
+      "Métricas de PROCESO = Propósito ESTRATÉGICO: mejorar proceso a largo plazo con datos históricos. Se recopilan de TODOS los proyectos, durante LARGO TIEMPO.",
     category: "metricas",
     difficulty: "medium",
     source: "Apunte 1",
@@ -759,7 +759,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Métricas de PROYECTO = Tácticas, describe características de ejecución. Reduce planificación, permite ajustes para evitar retrasos/riesgos, minimiza defectos y costo. Evalúa calidad en cada etapa. Fuente: Apunte 1.",
+      "Métricas de PROYECTO = Tácticas, describe características de ejecución. Reduce planificación, permite ajustes para evitar retrasos/riesgos, minimiza defectos y costo. Evalúa calidad en cada etapa.",
     category: "metricas",
     difficulty: "medium",
     source: "Apunte 1",
@@ -778,7 +778,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "MEDIDA = valor asignado a un atributo. MÉTRICA = medida cuantitativa del grado en que algo posee atributo. INDICADOR = métrica o combinación que proporciona visión profunda (útil para decisiones). Fuente: Apunte 1.",
+      "MEDIDA = valor asignado a un atributo. MÉTRICA = medida cuantitativa del grado en que algo posee atributo. INDICADOR = métrica o combinación que proporciona visión profunda (útil para decisiones).",
     category: "metricas",
     difficulty: "hard",
     source: "Apunte 1",
@@ -797,7 +797,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "BENEFICIO de métricas de proceso = Identificar barreras y oportunidades de MEJORA. Proporciona datos históricos para mejorar procesos futuros. Fuente: Examen UNLaM.",
+      "BENEFICIO de métricas de proceso = Identificar barreras y oportunidades de MEJORA. Proporciona datos históricos para mejorar procesos futuros.",
     category: "metricas",
     difficulty: "easy",
     source: "Examen UNLaM",
@@ -816,7 +816,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "D",
     justification:
-      "Métricas de ESFUERZO = difíciles de valorar, se miden INDIRECTAMENTE. Requieren estimaciones y datos históricos. No se miden directamente como LDC. Fuente: Examen UNLaM.",
+      "Métricas de ESFUERZO = difíciles de valorar, se miden INDIRECTAMENTE. Requieren estimaciones y datos históricos. No se miden directamente como LDC.",
     category: "metricas",
     difficulty: "hard",
     source: "Examen UNLaM",
@@ -835,7 +835,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "D",
     justification:
-      "PROPÓSITO mediciones = Ayudar en TOMA DE DECISIONES tácticas y estratégicas. Proporciona datos confiables para decisiones de gestión. Fuente: Examen UNLaM.",
+      "PROPÓSITO mediciones = Ayudar en TOMA DE DECISIONES tácticas y estratégicas. Proporciona datos confiables para decisiones de gestión.",
     category: "metricas",
     difficulty: "medium",
     source: "Examen UNLaM",
@@ -854,7 +854,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "PROPÓSITO métricas de proceso = Mejorar nivel GLOBAL DE MADUREZ del proceso a largo plazo. Se usan datos históricos para evolucionar el proceso. Fuente: Examen UNLaM.",
+      "PROPÓSITO métricas de proceso = Mejorar nivel GLOBAL DE MADUREZ del proceso a largo plazo. Se usan datos históricos para evolucionar el proceso.",
     category: "metricas",
     difficulty: "medium",
     source: "Examen UNLaM",
@@ -873,7 +873,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Métricas se clasifican por naturaleza como: BÁSICAS (directas del código), AGREGACIÓN (suma ponderada de básicas), DERIVADAS (función matemática), HISTÓRICAS (datos históricos). Fuente: Apunte 1.",
+      "Métricas se clasifican por naturaleza como: BÁSICAS (directas del código), AGREGACIÓN (suma ponderada de básicas), DERIVADAS (función matemática), HISTÓRICAS (datos históricos).",
     category: "metricas",
     difficulty: "medium",
     source: "Apunte 1",
@@ -892,7 +892,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "D",
     justification:
-      "Todas son MÉTRICAS BÁSICAS: (1) LDC = líneas de código, (2) Horas desarrollo, (3) Cantidad atributos, (4) Cantidad integrantes, (5) Defectos encontrados. Todas se miden DIRECTAMENTE. Fuente: Apunte 1.",
+      "Todas son MÉTRICAS BÁSICAS: (1) LDC = líneas de código, (2) Horas desarrollo, (3) Cantidad atributos, (4) Cantidad integrantes, (5) Defectos encontrados. Todas se miden DIRECTAMENTE.",
     category: "metricas",
     difficulty: "easy",
     source: "Apunte 1",
@@ -911,7 +911,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "Métricas de AGREGACIÓN = compuestas a partir de métricas básicas, frecuentemente con SUMA PONDERADA. Combinan múltiples métricas en una sola medida agregada. Fuente: Fichas Miel - Clase 4.",
+      "Métricas de AGREGACIÓN = compuestas a partir de métricas básicas, frecuentemente con SUMA PONDERADA. Combinan múltiples métricas en una sola medida agregada.",
     category: "metricas",
     difficulty: "medium",
     source: "Fichas Miel",
@@ -932,7 +932,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "Los 5 elementos del Dominio de Información para PF: EE=Entradas Externas, SE=Salidas Externas, CI=Consultas Interactivas, ALI=Archivos Lógicos Internos, AIE=Archivos Interfaz Externos. Fuente: Apunte 1.",
+      "Los 5 elementos del Dominio de Información para PF: EE=Entradas Externas, SE=Salidas Externas, CI=Consultas Interactivas, ALI=Archivos Lógicos Internos, AIE=Archivos Interfaz Externos.",
     category: "pf_teoria",
     difficulty: "easy",
     source: "Apunte 1",
@@ -951,7 +951,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "ENTRADA EXTERNA (EE) = Datos que el usuario o aplicaciones INGRESAN al sistema. Ejemplo: formulario de entrada de datos. Se clasifican por complejidad: baja, media, alta. Fuente: Apunte 1.",
+      "ENTRADA EXTERNA (EE) = Datos que el usuario o aplicaciones INGRESAN al sistema. Ejemplo: formulario de entrada de datos. Se clasifican por complejidad: baja, media, alta.",
     category: "pf_teoria",
     difficulty: "easy",
     source: "Apunte 1",
@@ -970,7 +970,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "SALIDA EXTERNA (SE) = Información que el SISTEMA DEVUELVE a usuarios (reportes, pantallas, mensajes). Se clasifican por complejidad. Ejemplo: reporte de ventas, pantalla de resultados. Fuente: Apunte 1.",
+      "SALIDA EXTERNA (SE) = Información que el SISTEMA DEVUELVE a usuarios (reportes, pantallas, mensajes). Se clasifican por complejidad. Ejemplo: reporte de ventas, pantalla de resultados.",
     category: "pf_teoria",
     difficulty: "easy",
     source: "Apunte 1",
@@ -989,7 +989,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "CONSULTA INTERACTIVA (CI) = Interacción donde usuario ingresa datos y recibe respuesta INMEDIATA (sin procesamiento demorado). Ejemplo: búsqueda en base de datos con resultado inmediato. Fuente: Apunte 1.",
+      "CONSULTA INTERACTIVA (CI) = Interacción donde usuario ingresa datos y recibe respuesta INMEDIATA (sin procesamiento demorado). Ejemplo: búsqueda en base de datos con resultado inmediato.",
     category: "pf_teoria",
     difficulty: "medium",
     source: "Apunte 1",
@@ -1008,7 +1008,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Hay 14 FACTORES DE AJUSTE técnicos en PF, cada uno con influencia de 0-5. Incluyen: Comunicación datos, Función distribuida, Rendimiento, Complejidad procesamiento, etc. Cálculo: 0.65 + (suma/100). Fuente: Apunte 1.",
+      "Hay 14 FACTORES DE AJUSTE: comunicaciones de datos, procesamiento distribuido, rendimiento, configuración utilizada, tasa de transacciones, entrada en línea, eficiencia del usuario, actualización en línea, procesamiento complejo, reusabilidad, instalación, operación, múltiples sitios y facilidad de cambio. Fórmula: 0.65 + (suma/100).",
     category: "pf_teoria",
     difficulty: "medium",
     source: "Apunte 1",
@@ -1027,7 +1027,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Cuando todos factores ajuste = 0: Factor Ajuste Total = 0.65 + (0/100) = 0.65... ESPERA: La fórmula correcta da 0.65. PERO si todos son 0 (mínima complejidad), el multiplicador es 1.0 (sin ajuste). PF Ajustados = PFSA × 1.0. Fuente: Apunte 1.",
+      "Cuando todos factores ajuste = 0: Factor Ajuste Total = 0.65 + (0/100) = 0.65... ESPERA: La fórmula correcta da 0.65. PERO si todos son 0 (mínima complejidad), el multiplicador es 1.0 (sin ajuste). PF Ajustados = PFSA × 1.0.",
     category: "pf_teoria",
     difficulty: "hard",
     source: "Apunte 1",
@@ -1048,7 +1048,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "PFSA = (4×3) + (9×5) + (6×6) + (3×15) + (2×5) = 12 + 45 + 36 + 45 + 10 = 148. Aproximado 152 según tabla. Fuente: Cálculo Puntos de Función.",
+      "PFSA = (4×3) + (9×5) + (6×6) + (3×15) + (2×5) = 12 + 45 + 36 + 45 + 10 = 148. Aproximado 152 según tabla.",
     category: "pf_calculo",
     difficulty: "hard",
     source: "Cálculos",
@@ -1067,7 +1067,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "Suma factores = (2×0) + (4×3) + (8×5) = 0 + 12 + 40 = 52. Factor Ajuste = 0.65 + (52/100) = 0.65 + 0.52 = 1.17. La fórmula de Albrecht aplica 14 factores de ajuste técnicos (escala 0-5), donde el factor base es 0.65 y la contribución total se divide por 100. Fuente: Cálculo PF.",
+      "Suma factores = (2×0) + (4×3) + (8×5) = 0 + 12 + 40 = 52. Factor Ajuste = 0.65 + (52/100) = 0.65 + 0.52 = 1.17. La fórmula de Albrecht aplica 14 factores de ajuste técnicos (escala 0-5), donde el factor base es 0.65 y la contribución total se divide por 100.",
     category: "pf_calculo",
     difficulty: "hard",
     source: "Cálculos",
@@ -1086,7 +1086,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "Factor Ajuste = 0.65 + (28/100) = 0.65 + 0.28 = 0.93. PF Ajustados = 400 × 0.93 = 372 PF. La fórmula de Albrecht suma la influencia de 14 factores de ajuste técnicos (cada uno 0-5), luego aplica el factor multiplicativo sobre PFSA. Fuente: Cálculo Puntos de Función.",
+      "Factor Ajuste = 0.65 + (28/100) = 0.65 + 0.28 = 0.93. PF Ajustados = 400 × 0.93 = 372 PF. La fórmula de Albrecht suma la influencia de 14 factores de ajuste técnicos (cada uno 0-5), luego aplica el factor multiplicativo sobre PFSA.",
     category: "pf_calculo",
     difficulty: "hard",
     source: "Ejercicio Práctico",
@@ -1105,7 +1105,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "LDC = PF × Ratio del lenguaje = 350 × 105 = 36,750 LDC. COBOL tiene ratio alto (105) porque es lenguaje antiguo/verbose. Fuente: Ejercicio Bancario.",
+      "LDC = PF × Ratio del lenguaje = 350 × 105 = 36,750 LDC. COBOL tiene ratio alto (105) porque es lenguaje antiguo/verbose.",
     category: "pf_calculo",
     difficulty: "easy",
     source: "Ejercicio Práctico",
@@ -1124,7 +1124,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "ESFUERZO = LDC / Productividad = 36,750 / 200 = 183.75 PERS-MES. Fuente: Ejercicio Bancario.",
+      "ESFUERZO = LDC / Productividad = 36,750 / 200 = 183.75 PERS-MES.",
     category: "pf_calculo",
     difficulty: "easy",
     source: "Ejercicio Práctico",
@@ -1143,7 +1143,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "DURACIÓN = Esfuerzo / Personas = 183.75 / 5 = 36.75 meses. Con 5 programadores, tardará ~37 meses. Fuente: Ejercicio Bancario.",
+      "DURACIÓN = Esfuerzo / Personas = 183.75 / 5 = 36.75 meses. Con 5 programadores, tardará ~37 meses.",
     category: "pf_calculo",
     difficulty: "easy",
     source: "Ejercicio Práctico",
@@ -1162,7 +1162,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "A",
     justification:
-      "COSTO = Esfuerzo (PERS-MES) × Costo mensual = 183.75 × 2,000 = USD 367,500. Fuente: Ejercicio Bancario.",
+      "COSTO = Esfuerzo (PERS-MES) × Costo mensual = 183.75 × 2,000 = USD 367,500.",
     category: "pf_calculo",
     difficulty: "easy",
     source: "Ejercicio Práctico",
@@ -1181,7 +1181,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "DURACIÓN calculada = 36.75 meses > PLAZO = 15 meses. NO CUMPLE. Excede por 21.75 meses (más que duplica plazo). Necesitaría más personas o lenguaje más productivo. Fuente: Ejercicio Bancario.",
+      "DURACIÓN calculada = 36.75 meses > PLAZO = 15 meses. NO CUMPLE. Excede por 21.75 meses (más que duplica plazo). Necesitaría más personas o lenguaje más productivo.",
     category: "pf_calculo",
     difficulty: "hard",
     source: "Ejercicio Práctico",
@@ -1202,7 +1202,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Las 5 'C' son: (1) COMPLEMENTARIEDAD (habilidades diferentes), (2) COORDINACIÓN (asignación adecuada), (3) COMUNICACIÓN (clara y oportuna), (4) CONFIANZA (en capacidades), (5) COMPROMISO (priorizar grupo). Fuente: Apunte 1.",
+      "Las 5 'C' son: (1) COMPLEMENTARIEDAD (habilidades diferentes), (2) COORDINACIÓN (asignación adecuada), (3) COMUNICACIÓN (clara y oportuna), (4) CONFIANZA (en capacidades), (5) COMPROMISO (priorizar grupo).",
     category: "equipo",
     difficulty: "easy",
     source: "Apunte 1",
@@ -1221,7 +1221,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "COMPLEMENTARIEDAD = Cada miembro aporta habilidades DIFERENCIALES (diferentes). Permite alcanzar logros imposibles individualmente. Ejemplo: programador + diseñador + analista. Fuente: Apunte 1.",
+      "COMPLEMENTARIEDAD = Cada miembro aporta habilidades DIFERENCIALES (diferentes). Permite alcanzar logros imposibles individualmente. Ejemplo: programador + diseñador + analista.",
     category: "equipo",
     difficulty: "easy",
     source: "Apunte 1",
@@ -1240,7 +1240,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "GRUPO = Rendimiento depende de lo que HACE CADA UNO. EQUIPO = Rendimiento incluye resultados individuales + PRODUCTO DEL TRABAJO COLECTIVO (sinergia). Fuente: Apunte 1.",
+      "GRUPO = Rendimiento depende de lo que HACE CADA UNO. EQUIPO = Rendimiento incluye resultados individuales + PRODUCTO DEL TRABAJO COLECTIVO (sinergia).",
     category: "equipo",
     difficulty: "medium",
     source: "Apunte 1",
@@ -1257,7 +1257,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "FALSO. En equipos de calidad, conflictos se resuelven mediante DEBATE ABIERTO y COLABORACIÓN (no imposición). El líder GUÍA, no CONTROLA. Hay discusión constructiva. Fuente: Apunte 1.",
+      "FALSO. En equipos de calidad, conflictos se resuelven mediante DEBATE ABIERTO y COLABORACIÓN (no imposición). El líder GUÍA, no CONTROLA. Hay discusión constructiva.",
     category: "equipo",
     difficulty: "medium",
     source: "Apunte 1",
@@ -1276,7 +1276,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Características equipo efectivo: (1) Clara cohesión, (2) Espíritu colectivo, (3) Satisfacción por calidad, (4) Responsabilidad mutua, (5) Integración armónica funciones. Liderazgo compartido, COOPERACIÓN. Fuente: Apunte 1.",
+      "Características equipo efectivo: (1) Clara cohesión, (2) Espíritu colectivo, (3) Satisfacción por calidad, (4) Responsabilidad mutua, (5) Integración armónica funciones. Liderazgo compartido, COOPERACIÓN.",
     category: "equipo",
     difficulty: "medium",
     source: "Apunte 1",
@@ -1297,7 +1297,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "Los 3 tipos de clientes: (1) CONSUMIDOR (compra/usa producto final), (2) CLIENTE EXTERNO (intermediarios entre empresa-consumidor), (3) CLIENTE INTERNO (departamentos dentro empresa que dependen de otros). Fuente: Apunte 1.",
+      "Los 3 tipos de clientes: (1) CONSUMIDOR (compra/usa producto final), (2) CLIENTE EXTERNO (intermediarios entre empresa-consumidor), (3) CLIENTE INTERNO (departamentos dentro empresa que dependen de otros).",
     category: "clientes",
     difficulty: "easy",
     source: "Apunte 1",
@@ -1316,7 +1316,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "CLIENTE INTERNO = Departamentos/equipos DENTRO empresa que dependen de otros. Ejemplo: Ensamblaje es cliente interno de Compras (requiere piezas). Satisfacción interna es crucial para funcionamiento eficiente. Fuente: Apunte 1.",
+      "CLIENTE INTERNO = Departamentos/equipos DENTRO empresa que dependen de otros. Ejemplo: Ensamblaje es cliente interno de Compras (requiere piezas). Satisfacción interna es crucial para funcionamiento eficiente.",
     category: "clientes",
     difficulty: "easy",
     source: "Apunte 1",
@@ -1335,7 +1335,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "SATISFACCIÓN = ACTITUD (percepto/sentimiento). LEALTAD = COMPORTAMIENTO (sigue comprando, recomienda). Cliente satisfecho PUEDE cambiar; cliente LEAL es estable. No hay lealtad sin satisfacción previa. Fuente: Evans Cap 4.",
+      "SATISFACCIÓN = ACTITUD (percepto/sentimiento). LEALTAD = COMPORTAMIENTO (sigue comprando, recomienda). Cliente satisfecho PUEDE cambiar; cliente LEAL es estable. No hay lealtad sin satisfacción previa.",
     category: "clientes",
     difficulty: "medium",
     source: "Evans Cap 4",
@@ -1354,7 +1354,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "C",
     justification:
-      "TODAS las 6 características ISO 9126 afectan satisfacción: Funcionalidad (¿hace lo que espero?), Confiabilidad (¿es confiable?), Usabilidad (¿fácil usar?), Eficiencia (¿rápido?), Mantenibilidad (¿se actualiza?), Portabilidad (¿funciona en mi PC?). Fuente: Apunte 1.",
+      "TODAS las 6 características ISO 9126 afectan satisfacción: Funcionalidad (¿hace lo que espero?), Confiabilidad (¿es confiable?), Usabilidad (¿fácil usar?), Eficiencia (¿rápido?), Mantenibilidad (¿se actualiza?), Portabilidad (¿funciona en mi PC?).",
     category: "clientes",
     difficulty: "hard",
     source: "Apunte 1",
@@ -1373,7 +1373,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "SEGMENTACIÓN = Dividir clientes en GRUPOS HOMOGÉNEOS con características/necesidades similares. Permite personalización y optimización de recursos. Tipos: Conductuales, Geográficas, Psicográficas, Demográficas. Fuente: Evans Cap 4.",
+      "SEGMENTACIÓN = Dividir clientes en GRUPOS HOMOGÉNEOS con características/necesidades similares. Permite personalización y optimización de recursos. Tipos: Conductuales, Geográficas, Psicográficas, Demográficas.",
     category: "clientes",
     difficulty: "medium",
     source: "Evans Cap 4",
@@ -1394,7 +1394,7 @@ const firstPartialQuestions: Question[] = [
     ],
     correctAnswer: "B",
     justification:
-      "DECIDIR = Proceso mental DELIBERADO, VOLUNTARIO, SISTEMÁTICO y RACIONAL para elegir UN curso de acción entre varias alternativas. Debe resolver un problema/situación. Fuente: Apunte 1.",
+      "DECIDIR = Proceso mental DELIBERADO, VOLUNTARIO, SISTEMÁTICO y RACIONAL para elegir UN curso de acción entre varias alternativas. Debe resolver un problema/situación.",
     category: "decisiones",
     difficulty: "medium",
     source: "Apunte 1",
