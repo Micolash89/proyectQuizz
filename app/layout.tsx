@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quiz - Calidad de Software UNLaM",
-  description: "Quiz simulator for Calidad de Software first partial exam preparation",
+  title: "Simulador de Parciales - UNLaM",
+  description:
+    "Simulador de parciales para practicar distintas materias de la facultad.",
 };
 
 export default function RootLayout({
@@ -25,10 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-slate-900 text-slate-100">
+      <body className="min-h-screen flex flex-col bg-background text-foreground">
         {children}
         <Footer />
       </body>

@@ -1,199 +1,188 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+const HOME_TITLE = 'Simulador de Parciales - UNLaM';
+const SUBJECT_SLUG = 'calidad-software';
+
+/** Resultados mínimos válidos para la pantalla de resultados. */
+const mockResults = {
+  score: 50,
+  totalQuestions: 100,
+  percentage: 50,
+  timeTotal: 2700,
+  answers: [],
+  categoryBreakdown: {
+    historia: { correct: 5, total: 10, percentage: 50 },
+  },
+  difficultyBreakdown: {
+    easy: { correct: 0, total: 0, percentage: 0 },
+    medium: { correct: 0, total: 0, percentage: 0 },
+    hard: { correct: 0, total: 0, percentage: 0 },
+  },
+};
+
+/**
+ * Siembra `sessionStorage.quizResults` antes de que cargue la página.
+ * La pantalla de resultados lee de ahí (no de query params).
+ */
+async function seedResults(page: Page, results: unknown) {
+  await page.addInitScript((payload) => {
+    window.sessionStorage.setItem('quizResults', payload as string);
+  }, JSON.stringify(results));
+}
 
 test.describe('Quiz Application - Route and Navigation Tests', () => {
-  // Test 1: Home page loads correctly
-  test('HOME: should load home page without 404', async ({ page }) => {
-    const response = await page.goto('http://localhost:3000/');
+  // Test 1: Home page (subject selection) loads correctly
+  test('HOME: should load the subject selection page', async ({ page }) => {
+    const response = await page.goto('/');
     expect(response?.status()).toBe(200);
-    expect(page).toHaveTitle('Quiz - Calidad de Software UNLaM');
-    await expect(page.locator('text=Quiz Calidad de Software')).toBeVisible();
-    await expect(page.locator('text=Comenzar Quiz')).toBeVisible();
+    await expect(page).toHaveTitle(HOME_TITLE);
+    await expect(
+      page.getByRole('heading', { name: 'Simulador de Parciales' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /Calidad de Software/ })
+    ).toBeVisible();
   });
 
-  // Test 2: Quiz page loads correctly
-  test('QUIZ: should load quiz page with feedback=end_only parameter', async ({ page }) => {
-    const response = await page.goto('http://localhost:3000/quiz?feedback=end_only');
-    expect(response?.status()).toBe(200);
-    // Either loading state or actual quiz content should be visible
-    const quizVisible = await page.locator('text=Quiz - Calidad de Software').isVisible().catch(() => false);
-    const loadingVisible = await page.locator('text=Cargando preguntas').isVisible().catch(() => false);
-    expect(quizVisible || loadingVisible).toBe(true);
+  // Test 2: Home → Subject setup page
+  test('FLOW: selecting a subject navigates to its setup page', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('link', { name: /Calidad de Software/ }).click();
+
+    await page.waitForURL(new RegExp(`/materia/${SUBJECT_SLUG}$`));
+    await expect(
+      page.getByRole('heading', { name: 'Calidad de Software' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /Comenzar Quiz/ })
+    ).toBeVisible();
   });
 
-  // Test 3: Quiz page loads with immediate feedback
-  test('QUIZ: should load quiz page with feedback=immediate parameter', async ({ page }) => {
-    const response = await page.goto('http://localhost:3000/quiz?feedback=immediate');
-    expect(response?.status()).toBe(200);
-    await expect(page.locator('text=Feedback inmediato')).toBeVisible({ timeout: 10000 });
+  // Test 3: Partial buttons show "1°" / "2°" and reflect selection
+  test('SETUP: partial buttons show 1° and 2° and toggle selection', async ({ page }) => {
+    await page.goto(`/materia/${SUBJECT_SLUG}`);
+
+    const primer = page.getByRole('button', { name: /1° Parcial/ });
+    const segundo = page.getByRole('button', { name: /2° Parcial/ });
+
+    await expect(primer).toHaveAttribute('aria-pressed', 'true');
+    await expect(segundo).toHaveAttribute('aria-pressed', 'false');
+
+    await segundo.click();
+    await expect(segundo).toHaveAttribute('aria-pressed', 'true');
+    await expect(primer).toHaveAttribute('aria-pressed', 'false');
   });
 
-  // Test 4: Navigation from home to quiz (end_only mode)
-  test('FLOW: Home → Quiz (end_only feedback mode) should work without errors', async ({ page }) => {
-    // Go to home
-    await page.goto('http://localhost:3000/');
-    await expect(page.locator('text=Retroalimentación al Final')).toBeVisible();
-    
-    // Verify end_only is selected by default
-    const endOnlyRadio = page.locator('input[value="end_only"]');
-    await expect(endOnlyRadio).toBeChecked();
+  // Test 4: Setup → Quiz with default (end_only) feedback
+  test('FLOW: Setup → Quiz (end_only) should work', async ({ page }) => {
+    await page.goto(`/materia/${SUBJECT_SLUG}`);
+    await expect(page.locator('input[value="end_only"]')).toBeChecked();
 
-    // Click start button
-    const startButton = page.locator('button:has-text("Comenzar Quiz")');
-    await startButton.click();
+    await page.getByRole('button', { name: /Comenzar Quiz/ }).click();
 
-    // Wait for navigation and verify quiz page loads
-    await page.waitForURL(/\/quiz\?feedback=end_only/);
-    const response = await page.goto(page.url());
-    expect(response?.status()).toBe(200);
-    
-    await expect(page.locator('text=Quiz - Calidad de Software')).toBeVisible();
+    await page.waitForURL(/\/quiz\?subject=calidad-software.*feedback=end_only/);
+    await expect(
+      page.getByRole('heading', { name: /Quiz - Calidad de Software/ })
+    ).toBeVisible({ timeout: 15000 });
   });
 
-  // Test 5: Navigation from home to quiz (immediate mode)
-  test('FLOW: Home → Quiz (immediate feedback mode) should work without errors', async ({ page }) => {
-    // Go to home
-    await page.goto('http://localhost:3000/');
-    
-    // Select immediate feedback
+  // Test 5: Setup → Quiz with immediate feedback
+  test('FLOW: Setup → Quiz (immediate) should work', async ({ page }) => {
+    await page.goto(`/materia/${SUBJECT_SLUG}`);
+
     const immediateRadio = page.locator('input[value="immediate"]');
     await immediateRadio.click();
     await expect(immediateRadio).toBeChecked();
 
-    // Click start button
-    const startButton = page.locator('button:has-text("Comenzar Quiz")');
-    await startButton.click();
+    await page.getByRole('button', { name: /Comenzar Quiz/ }).click();
 
-    // Wait for navigation and verify quiz page loads
-    await page.waitForURL(/\/quiz\?feedback=immediate/);
-    const response = await page.goto(page.url());
-    expect(response?.status()).toBe(200);
-    
-    await expect(page.locator('text=Quiz - Calidad de Software')).toBeVisible();
-  });
-
-  // Test 6: Results page should load with valid data
-  test('RESULTS: should load results page when navigated with valid base64 data', async ({ page }) => {
-    // Create minimal valid results data
-    const mockResults = {
-      score: 50,
-      totalQuestions: 100,
-      percentage: 50,
-      timeTotal: 2700,
-      answers: [],
-      categoryBreakdown: {},
-      difficultyBreakdown: {
-        easy: { correct: 0, total: 0, percentage: 0 },
-        medium: { correct: 0, total: 0, percentage: 0 },
-        hard: { correct: 0, total: 0, percentage: 0 }
-      }
-    };
-    
-    const encodedData = btoa(JSON.stringify(mockResults));
-    const response = await page.goto(`http://localhost:3000/results?data=${encodedData}`);
-    expect(response?.status()).toBe(200);
-    
-    await expect(page.locator('text=Resultados del Quiz')).toBeVisible();
-    await expect(page.locator('text=50/100')).toBeVisible();
-  });
-
-  // Test 7: Back to home from results
-  test('FLOW: Results → Home should work', async ({ page }) => {
-    // Navigate to results with mock data
-    const mockResults = {
-      score: 75,
-      totalQuestions: 100,
-      percentage: 75,
-      timeTotal: 2700,
-      answers: [],
-      categoryBreakdown: {},
-      difficultyBreakdown: {
-        easy: { correct: 0, total: 0, percentage: 0 },
-        medium: { correct: 0, total: 0, percentage: 0 },
-        hard: { correct: 0, total: 0, percentage: 0 }
-      }
-    };
-    
-    const encodedData = btoa(JSON.stringify(mockResults));
-    await page.goto(`http://localhost:3000/results?data=${encodedData}`);
-    
-    // Click "Volver al Inicio"
-    const backButton = page.locator('button:has-text("Volver al Inicio")');
-    await backButton.click();
-    
-    // Should redirect to home
-    await page.waitForURL('http://localhost:3000/');
-    const response = await page.goto(page.url());
-    expect(response?.status()).toBe(200);
-    
-    await expect(page.locator('text=Quiz Calidad de Software')).toBeVisible();
-  });
-
-  // Test 8: Results → Retry Quiz should navigate with correct params
-  test('FLOW: Results → Retry Quiz should reset and go to quiz', async ({ page }) => {
-    // Navigate to results with mock data
-    const mockResults = {
-      score: 60,
-      totalQuestions: 100,
-      percentage: 60,
-      timeTotal: 2700,
-      answers: [],
-      categoryBreakdown: {},
-      difficultyBreakdown: {
-        easy: { correct: 0, total: 0, percentage: 0 },
-        medium: { correct: 0, total: 0, percentage: 0 },
-        hard: { correct: 0, total: 0, percentage: 0 }
-      }
-    };
-    
-    const encodedData = btoa(JSON.stringify(mockResults));
-    await page.goto(`http://localhost:3000/results?data=${encodedData}`);
-    
-    // Click "Reintentar Quiz"
-    const retryButton = page.locator('button:has-text("Reintentar Quiz")');
-    await retryButton.click();
-    
-    // Should redirect to quiz page
-    await page.waitForURL(/\/quiz/);
-    const response = await page.goto(page.url());
-    expect(response?.status()).toBe(200);
-    
-    await expect(page.locator('text=Quiz - Calidad de Software')).toBeVisible();
-  });
-
-  // Test 9: Invalid results data should redirect to home
-  test('RESULTS: invalid data should redirect to home', async ({ page }) => {
-    // Try to load results with invalid base64
-    await page.goto('http://localhost:3000/results?data=invalid_base64_data');
-    
-    // Should eventually redirect to home after error handling
-    await page.waitForURL('http://localhost:3000/', { timeout: 5000 }).catch(() => {
-      // Might not redirect if error is caught on results page
+    await page.waitForURL(/\/quiz\?subject=calidad-software.*feedback=immediate/);
+    await expect(page.getByText('Feedback inmediato activado')).toBeVisible({
+      timeout: 15000,
     });
-    
-    // Should be either on home page or results page (doesn't matter, error was handled gracefully)
-    const urlCheck = page.url();
-    const isHome = urlCheck === 'http://localhost:3000/';
-    const isResults = urlCheck.includes('/results');
-    expect(isHome || isResults).toBe(true);
   });
 
-  // Test 10: Accessibility - all buttons should be focusable
-  test('ACCESSIBILITY: home page buttons should be keyboard focusable', async ({ page }) => {
-    await page.goto('http://localhost:3000/');
-    
-    // Tab to quantity buttons (now first before feedback)
-    await page.keyboard.press('Tab');
-    let focused = await page.evaluate(() => document.activeElement?.getAttribute('value') || document.activeElement?.textContent);
-    // Should focus on either quantity button or feedback radio
-    expect(focused).not.toBeNull();
-    
-    // Tab through multiple times to reach start button
-    for (let i = 0; i < 15; i++) {
-      await page.keyboard.press('Tab');
-    }
-    
-    const startButton = page.locator('button:has-text("Comenzar Quiz")');
-    // Button should exist and be focusable (may or may not be currently focused)
+  // Test 6: Results page renders when sessionStorage has valid data
+  test('RESULTS: should render results from sessionStorage', async ({ page }) => {
+    await seedResults(page, mockResults);
+
+    const response = await page.goto(
+      `/results?subject=${SUBJECT_SLUG}&feedback=end_only&count=25&partial=primer`
+    );
+    expect(response?.status()).toBe(200);
+
+    await expect(page.getByRole('heading', { name: 'Resultados' })).toBeVisible();
+    await expect(page.getByText('50/100')).toBeVisible();
+    await expect(page.getByText('50.0%')).toBeVisible();
+  });
+
+  // Test 7: Results → Home
+  test('FLOW: Results → Home should work', async ({ page }) => {
+    await seedResults(page, mockResults);
+    await page.goto(
+      `/results?subject=${SUBJECT_SLUG}&feedback=end_only&count=25&partial=primer`
+    );
+
+    await page.getByRole('button', { name: 'Volver al inicio' }).click();
+
+    await page.waitForURL('http://localhost:3000/');
+    await expect(
+      page.getByRole('heading', { name: 'Simulador de Parciales' })
+    ).toBeVisible();
+  });
+
+  // Test 8: Results → Retry Quiz
+  test('FLOW: Results → Retry Quiz should go back to the quiz', async ({ page }) => {
+    await seedResults(page, mockResults);
+    await page.goto(
+      `/results?subject=${SUBJECT_SLUG}&feedback=end_only&count=25&partial=primer`
+    );
+
+    await page.getByRole('button', { name: 'Reintentar Quiz' }).click();
+
+    await page.waitForURL(/\/quiz\?subject=calidad-software/);
+    await expect(
+      page.getByRole('heading', { name: /Quiz - Calidad de Software/ })
+    ).toBeVisible({ timeout: 15000 });
+  });
+
+  // Test 9: Results without data should redirect to home
+  test('RESULTS: missing data should redirect to home', async ({ page }) => {
+    await page.goto(`/results?subject=${SUBJECT_SLUG}`);
+
+    await page.waitForURL('http://localhost:3000/', { timeout: 10000 });
+    await expect(
+      page.getByRole('heading', { name: 'Simulador de Parciales' })
+    ).toBeVisible();
+  });
+
+  // Test 10: Unknown subject slug shows a graceful fallback
+  test('SETUP: unknown subject shows fallback with link home', async ({ page }) => {
+    await page.goto('/materia/no-existe');
+
+    await expect(
+      page.getByRole('heading', { name: 'Materia no encontrada' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /Volver al inicio/ })
+    ).toBeVisible();
+  });
+
+  // Test 11: Accessibility - setup controls are keyboard focusable
+  test('ACCESSIBILITY: setup controls should be keyboard focusable', async ({ page }) => {
+    await page.goto(`/materia/${SUBJECT_SLUG}`);
+
+    const startButton = page.getByRole('button', { name: /Comenzar Quiz/ });
     await expect(startButton).toBeVisible();
+
+    await startButton.focus();
+    await expect(startButton).toBeFocused();
+
+    // Tab navigation must always land on a real focusable element.
+    await page.keyboard.press('Tab');
+    const focusedTag = await page.evaluate(
+      () => document.activeElement?.tagName ?? null
+    );
+    expect(focusedTag).not.toBeNull();
   });
 });

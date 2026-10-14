@@ -1,5 +1,7 @@
 "use client";
 
+import { LuClock } from "react-icons/lu";
+
 interface ProgressBarProps {
   current: number;
   total: number;
@@ -7,7 +9,7 @@ interface ProgressBarProps {
 }
 
 export function ProgressBar({ current, total, timeElapsed }: ProgressBarProps) {
-  const percentage = (current / total) * 100;
+  const percentage = total > 0 ? (current / total) * 100 : 0;
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -16,24 +18,31 @@ export function ProgressBar({ current, total, timeElapsed }: ProgressBarProps) {
   };
 
   return (
-    <div className="w-full mb-6">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-semibold text-slate-400">
+    <div className="mb-6 w-full">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-sm font-semibold text-gray-3">
           Pregunta {current} de {total}
         </span>
         {timeElapsed !== undefined && (
-          <span className="text-xs text-slate-500">{formatTime(timeElapsed)}</span>
+          <span className="inline-flex items-center gap-1 text-xs text-gray-3">
+            <LuClock aria-hidden="true" className="h-3.5 w-3.5" />
+            {formatTime(timeElapsed)}
+          </span>
         )}
       </div>
-      <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+      <div
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={total}
+        aria-valuenow={current}
+        aria-label="Progreso del quiz"
+        className="h-2 w-full overflow-hidden rounded-full bg-surface-3"
+      >
         <div
-          className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300"
+          className="h-full bg-secondary transition-all duration-300"
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <p className="text-xs text-slate-500 mt-2">
-        {percentage.toFixed(0)}% completado
-      </p>
     </div>
   );
 }

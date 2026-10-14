@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  LuArrowRight,
+  LuChevronLeft,
+  LuFlag,
+  LuSkipForward,
+} from "react-icons/lu";
+
 interface NavigationProps {
   onPrevious: () => void;
   onNext: () => void;
@@ -7,10 +14,15 @@ interface NavigationProps {
   onFinish: () => void;
   hasPrevious: boolean;
   hasNext: boolean;
-  canAnswerNext: boolean;
   isLastQuestion: boolean;
   hasAnswered: boolean;
 }
+
+const secondaryButton =
+  "inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-gray-1 transition hover:border-gray-2 hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-40";
+
+const primaryButton =
+  "inline-flex items-center gap-1.5 rounded-lg bg-secondary px-6 py-2 text-sm font-semibold text-primary transition hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-40";
 
 export function Navigation({
   onPrevious,
@@ -19,44 +31,51 @@ export function Navigation({
   onFinish,
   hasPrevious,
   hasNext,
-  canAnswerNext,
   isLastQuestion,
   hasAnswered,
 }: NavigationProps) {
   return (
-    <div className="flex gap-3 justify-between pt-6 border-t border-slate-700">
+    <div className="flex justify-between gap-3 border-t border-line pt-6">
       <button
+        type="button"
         onClick={onPrevious}
         disabled={!hasPrevious}
-        className="px-4 py-2 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium"
+        className={secondaryButton}
       >
-        ← Anterior
+        <LuChevronLeft aria-hidden="true" className="h-4 w-4" />
+        Anterior
       </button>
 
       <div className="flex gap-2">
         <button
+          type="button"
           onClick={onSkip}
           disabled={!hasNext || !hasAnswered}
-          className="px-4 py-2 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium"
+          className={secondaryButton}
         >
+          <LuSkipForward aria-hidden="true" className="h-4 w-4" />
           Saltar
         </button>
 
         {isLastQuestion ? (
           <button
+            type="button"
             onClick={onFinish}
             disabled={!hasAnswered}
-            className="px-6 py-2 rounded bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium"
+            className={primaryButton}
           >
+            <LuFlag aria-hidden="true" className="h-4 w-4" />
             Terminar Quiz
           </button>
         ) : (
           <button
+            type="button"
             onClick={onNext}
             disabled={!hasAnswered}
-            className="px-6 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm font-medium"
+            className={primaryButton}
           >
-            Siguiente →
+            Siguiente
+            <LuArrowRight aria-hidden="true" className="h-4 w-4" />
           </button>
         )}
       </div>

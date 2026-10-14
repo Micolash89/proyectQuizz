@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   Question,
   UserAnswer,
@@ -9,57 +9,61 @@ import {
   CategoryBreakdown,
   FeedbackMode,
 } from "@/types/quiz";
-import { shuffle } from "@/utils/shuffle";
 
+/**
+ * Orquesta el estado de un quiz sobre una lista de preguntas ya preparada
+ * (filtrada, mezclada y recortada por quien la invoca).
+ */
 export const useQuiz = (questions: Question[], feedbackMode: FeedbackMode) => {
-  const [quizState, setQuizState] = useState<QuizState>({
+  const [quizState, setQuizState] = useState<QuizState>(() => ({
     currentQuestionIndex: 0,
     answers: [],
     startTime: Date.now(),
     showFeedback: false,
-  });
+  }));
 
-  const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
+  // Marca de tiempo de la última respuesta para medir el tiempo por pregunta.
+  const lastAnswerAt = useRef(quizState.startTime);
 
-  useEffect(() => {
-    setShuffledQuestions(shuffle(questions));
-  }, [questions]);
-
-  const currentQuestion = shuffledQuestions[quizState.currentQuestionIndex];
-  const isLastQuestion = quizState.currentQuestionIndex === shuffledQuestions.length - 1;
+  const currentQuestion = questions[quizState.currentQuestionIndex];
+  const isLastQuestion =
+    quizState.currentQuestionIndex === questions.length - 1;
 
   const selectAnswer = useCallback(
     (answer: string | string[]) => {
       if (!currentQuestion) return;
 
-      // Helper function to compare answers (handles both string and array cases)
-      const compareAnswers = (selected: string | string[], correct: string | string[]): boolean => {
-        // If both are arrays, sort and compare
+      const compareAnswers = (
+        selected: string | string[],
+        correct: string | string[]
+      ): boolean => {
         if (Array.isArray(selected) && Array.isArray(correct)) {
           const sortedSelected = [...selected].sort();
           const sortedCorrect = [...correct].sort();
-          return JSON.stringify(sortedSelected) === JSON.stringify(sortedCorrect);
+          return (
+            JSON.stringify(sortedSelected) === JSON.stringify(sortedCorrect)
+          );
         }
-        // If both are strings, simple comparison
         if (typeof selected === "string" && typeof correct === "string") {
           return selected === correct;
         }
-        // Otherwise, they don't match
         return false;
       };
 
+      const now = Date.now();
       const isCorrect = compareAnswers(answer, currentQuestion.correctAnswer);
 
       const newAnswer: UserAnswer = {
         questionId: currentQuestion.id,
         selectedAnswer: answer,
         isCorrect,
-        timeSpent: (Date.now() - quizState.startTime) / 1000,
+        timeSpent: (now - lastAnswerAt.current) / 1000,
         questionText: currentQuestion.text,
         correctAnswer: currentQuestion.correctAnswer,
         category: currentQuestion.category,
         difficulty: currentQuestion.difficulty,
       };
+      lastAnswerAt.current = now;
 
       setQuizState((prev) => ({
         ...prev,
@@ -68,7 +72,7 @@ export const useQuiz = (questions: Question[], feedbackMode: FeedbackMode) => {
         feedbackAnswer: newAnswer,
       }));
     },
-    [currentQuestion, quizState.startTime, feedbackMode]
+    [currentQuestion, feedbackMode]
   );
 
   const nextQuestion = useCallback(() => {
@@ -80,14 +84,16 @@ export const useQuiz = (questions: Question[], feedbackMode: FeedbackMode) => {
   }, []);
 
   const previousQuestion = useCallback(() => {
-    if (quizState.currentQuestionIndex > 0) {
-      setQuizState((prev) => ({
-        ...prev,
-        currentQuestionIndex: prev.currentQuestionIndex - 1,
-        showFeedback: false,
-      }));
-    }
-  }, [quizState.currentQuestionIndex]);
+    setQuizState((prev) =>
+      prev.currentQuestionIndex > 0
+        ? {
+            ...prev,
+            currentQuestionIndex: prev.currentQuestionIndex - 1,
+            showFeedback: false,
+          }
+        : prev
+    );
+  }, []);
 
   const skipQuestion = useCallback(() => {
     if (!isLastQuestion) {
@@ -99,25 +105,29 @@ export const useQuiz = (questions: Question[], feedbackMode: FeedbackMode) => {
     const totalQuestions = quizState.answers.length;
     const correctAnswers = quizState.answers.filter((a) => a.isCorrect).length;
     const score = correctAnswers;
-    const percentage = (correctAnswers / totalQuestions) * 100;
+    const percentage =
+      totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
     const timeTotal = (Date.now() - quizState.startTime) / 1000;
 
-    // Category breakdown
     const categoryBreakdown: CategoryBreakdown = {};
     quizState.answers.forEach((answer) => {
       if (!categoryBreakdown[answer.category]) {
-        categoryBreakdown[answer.category] = { correct: 0, total: 0, percentage: 0 };
+        categoryBreakdown[answer.category] = {
+          correct: 0,
+          total: 0,
+          percentage: 0,
+        };
       }
       categoryBreakdown[answer.category].total += 1;
       if (answer.isCorrect) {
         categoryBreakdown[answer.category].correct += 1;
       }
       categoryBreakdown[answer.category].percentage =
-        (categoryBreakdown[answer.category].correct / categoryBreakdown[answer.category].total) *
+        (categoryBreakdown[answer.category].correct /
+          categoryBreakdown[answer.category].total) *
         100;
     });
 
-    // Difficulty breakdown
     const difficultyBreakdown = {
       easy: { correct: 0, total: 0, percentage: 0 },
       medium: { correct: 0, total: 0, percentage: 0 },
@@ -164,7 +174,7 @@ export const useQuiz = (questions: Question[], feedbackMode: FeedbackMode) => {
     skipQuestion,
     calculateResults,
     hasAnsweredCurrent,
-    totalQuestions: shuffledQuestions.length,
+    totalQuestions: questions.length,
     progress: quizState.currentQuestionIndex,
   };
 };
