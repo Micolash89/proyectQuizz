@@ -27,9 +27,6 @@ export function SubjectCard({ subject }: SubjectCardProps) {
         <span className="block text-base font-semibold text-secondary">
           {subject.name}
         </span>
-        <span className="mt-0.5 block text-sm text-gray-3">
-          {subject.description}
-        </span>
       </span>
 
       <LuChevronRight

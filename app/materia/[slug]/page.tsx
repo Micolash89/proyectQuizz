@@ -38,7 +38,7 @@ export default function SubjectSetupPage() {
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
   const [partial, setPartial] = useState<Partial>("primer");
-  const [feedbackMode, setFeedbackMode] = useState<FeedbackMode>("end_only");
+  const [feedbackMode, setFeedbackMode] = useState<FeedbackMode>("immediate");
   const [questionCount, setQuestionCount] = useState<number>(25);
   const [loading, setLoading] = useState(false);
 
@@ -229,7 +229,9 @@ export default function SubjectSetupPage() {
                   ) : (
                     <LuHash aria-hidden="true" className="h-4 w-4" />
                   )}
-                  <span>{formatCountButton(count)}</span>
+                  <span className="text-base text-nowrap text-gray-3">
+                    {formatCountButton(count)}
+                  </span>
                 </button>
               ))}
             </div>

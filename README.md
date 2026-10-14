@@ -105,10 +105,3 @@ git checkout -- playwright-report test-results
 ## Stack
 
 Next.js 16.2.6 (App Router, Turbopack) · React 19.2.4 · TypeScript · Tailwind CSS v4 (`@theme`) · `react-icons/lu` · Playwright.
-
-## Checklist antes de pushear
-
-- [ ] `pnpm lint` sin errores
-- [ ] `pnpm build` OK
-- [ ] `pnpm test:e2e` en verde
-- [ ] `playwright-report/` y `test-results/` revertidos
