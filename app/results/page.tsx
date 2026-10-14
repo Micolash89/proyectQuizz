@@ -1,242 +1,347 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Suspense } from "react";
-import { useEffect, useState } from "react";
-import { QuizResult, Partial } from "@/types/quiz";
-import { questionsBank } from "@/data/questions";
+import { Suspense, type ReactNode } from "react";
+import { useEffect, useMemo } from "react";
+import {
+  LuArrowLeft,
+  LuChartBar,
+  LuCircleAlert,
+  LuCircleCheck,
+  LuClock,
+  LuLightbulb,
+  LuListChecks,
+  LuPercent,
+  LuRotateCcw,
+  LuTrophy,
+  LuTrendingUp,
+  LuZap,
+} from "react-icons/lu";
+import type { IconType } from "react-icons/lib";
+import type { Partial, QuizResult, SubjectId } from "@/types/quiz";
+import {
+  getQuestionsBySubject,
+  getSubject,
+  isValidSubjectId,
+} from "@/data/subjects";
 import { ResultsTable } from "@/components/ResultsTable";
+import { useIsClient } from "@/hooks/useIsClient";
+
+/** Niveles de desempeño, evaluados de mayor a menor umbral. */
+const PERFORMANCE_TIERS = [
+  {
+    min: 80,
+    label: "Excelente",
+    Icon: LuTrophy,
+    textClass: "text-success",
+    barClass: "bg-success",
+  },
+  {
+    min: 60,
+    label: "Bien",
+    Icon: LuTrendingUp,
+    textClass: "text-warning",
+    barClass: "bg-warning",
+  },
+  {
+    min: 0,
+    label: "A mejorar",
+    Icon: LuCircleAlert,
+    textClass: "text-danger",
+    barClass: "bg-danger",
+  },
+] as const;
+
+function getPerformanceTier(percentage: number) {
+  return (
+    PERFORMANCE_TIERS.find((tier) => percentage >= tier.min) ??
+    PERFORMANCE_TIERS[PERFORMANCE_TIERS.length - 1]
+  );
+}
+
+/** Color de barra según el porcentaje (semántico). */
+function getBarClass(percentage: number) {
+  return getPerformanceTier(percentage).barClass;
+}
+
+const DIFFICULTY_ROWS = [
+  { key: "easy", label: "Fácil", barClass: "bg-success" },
+  { key: "medium", label: "Medio", barClass: "bg-warning" },
+  { key: "hard", label: "Difícil", barClass: "bg-danger" },
+] as const;
+
+function formatTime(seconds: number) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}m ${secs}s`;
+}
+
+function formatCategory(category: string) {
+  return category.replace(/_/g, " ");
+}
+
+function StatBlock({
+  Icon,
+  value,
+  label,
+  valueClass = "text-secondary",
+}: {
+  Icon: IconType;
+  value: ReactNode;
+  label: string;
+  valueClass?: string;
+}) {
+  return (
+    <div className="text-center">
+      <Icon aria-hidden="true" className="mx-auto mb-2 h-5 w-5 text-gray-3" />
+      <p className={`text-4xl font-bold mb-1 ${valueClass}`}>{value}</p>
+      <p className="text-sm text-gray-3">{label}</p>
+    </div>
+  );
+}
+
+function LoadingScreen({ label }: { label: string }) {
+  return (
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <div className="text-center">
+        <p className="mb-4 text-gray-3">{label}</p>
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-line border-t-secondary" />
+      </div>
+    </div>
+  );
+}
 
 function ResultsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [results, setResults] = useState<QuizResult | null>(null);
+  const isClient = useIsClient();
 
-  // Get feedback, count and partial from query params with fallbacks
   const feedback = searchParams.get("feedback") || "end_only";
   const count = searchParams.get("count") || "25";
   const partial = (searchParams.get("partial") as Partial) || "primer";
+  const subjectParam = searchParams.get("subject");
+  const subjectId: SubjectId =
+    subjectParam && isValidSubjectId(subjectParam)
+      ? subjectParam
+      : "calidad-software";
+  const subject = getSubject(subjectId);
+
+  // Lectura pura de sessionStorage durante el render (solo cliente). Durante
+  // SSR e hidratación `isClient` es `false`, así que no hay acceso al navegador.
+  const results = useMemo<QuizResult | null>(() => {
+    if (!isClient) return null;
+
+    const data = sessionStorage.getItem("quizResults");
+    if (!data) return null;
+
+    try {
+      return JSON.parse(data) as QuizResult;
+    } catch (e) {
+      console.error("Error decoding results:", e);
+      return null;
+    }
+  }, [isClient]);
+
+  // Efectos secundarios sobre el sistema externo (sessionStorage) y navegación:
+  // ninguno llama a setState, por lo que no generan renders en cascada.
+  useEffect(() => {
+    if (isClient) sessionStorage.removeItem("quizResults");
+  }, [isClient, results]);
 
   useEffect(() => {
-    const data = sessionStorage.getItem("quizResults");
-    if (data) {
-      try {
-        const decoded = JSON.parse(data);
-        setResults(decoded);
-        sessionStorage.removeItem("quizResults");
-      } catch (e) {
-        console.error("Error decoding results:", e);
-        router.push("/");
-      }
-    } else {
-      router.push("/");
-    }
-  }, [router]);
+    if (isClient && !results) router.push("/");
+  }, [isClient, results, router]);
+
+  // Categorías con menor desempeño, para recomendaciones accionables.
+  const weakestCategories = useMemo(() => {
+    if (!results) return [];
+    return Object.entries(results.categoryBreakdown)
+      .filter(([, data]) => data.percentage < 60)
+      .sort((a, b) => a[1].percentage - b[1].percentage)
+      .map(([category]) => formatCategory(category));
+  }, [results]);
 
   if (!results) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-slate-400 mb-4">Cargando resultados...</p>
-          <div className="inline-block animate-spin">
-            <div className="h-8 w-8 border-4 border-slate-700 border-t-blue-500 rounded-full" />
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen label="Cargando resultados..." />;
   }
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}m ${secs}s`;
-  };
+  const tier = getPerformanceTier(results.percentage);
+  const partialLabel = partial === "primer" ? "1° Parcial" : "2° Parcial";
 
-  const getScoreColor = (percentage: number) => {
-    if (percentage >= 80) return "text-green-400";
-    if (percentage >= 60) return "text-yellow-400";
-    return "text-red-400";
-  };
-
-  const getScoreBg = (percentage: number) => {
-    if (percentage >= 80) return "from-green-900/20 to-green-800/10";
-    if (percentage >= 60) return "from-yellow-900/20 to-yellow-800/10";
-    return "from-red-900/20 to-red-800/10";
-  };
+  const recommendation =
+    results.percentage >= 80
+      ? `¡Excelente desempeño! Dominás muy bien los temas del ${partialLabel}. Seguí repasando los conceptos clave y practicando cálculos para mantener el nivel.`
+      : results.percentage >= 60
+        ? weakestCategories.length > 0
+          ? `Buen trabajo en el ${partialLabel}. Tenés margen para mejorar en: ${weakestCategories.join(", ")}. Volvé a repasar esas categorías y reintentá el quiz.`
+          : `Buen trabajo en el ${partialLabel}. Repasá las preguntas que fallaste para consolidar los temas más débiles.`
+        : weakestCategories.length > 0
+          ? `Necesitás reforzar el ${partialLabel}. Enfocate primero en: ${weakestCategories.join(", ")}. Repasá la teoría y practicá con más preguntas de esas categorías.`
+          : `Necesitás reforzar el ${partialLabel}. Repasá el material de la materia y practicá con más preguntas antes de reintentar.`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen px-4 py-8">
+      <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <h1 className="text-3xl font-bold text-slate-100 mb-8 text-center">
-          📊 Resultados del Quiz - {partial === "primer" ? "Primer Parcial" : "Segundo Parcial"}
-        </h1>
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-secondary">Resultados</h1>
+          <p className="mt-2 text-gray-3">
+            {subject?.shortName ?? "Quiz"} · {partialLabel}
+          </p>
+        </header>
 
         {/* Main Score Card */}
-        <div
-          className={`bg-gradient-to-br ${getScoreBg(results.percentage)} border border-slate-700 rounded-lg p-8 mb-8`}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Score */}
+        <div className="mb-8 overflow-hidden rounded-2xl border border-line bg-surface">
+          <div className={`h-1.5 w-full ${tier.barClass}`} />
+          <div className="grid grid-cols-2 gap-6 p-8 md:grid-cols-4">
+            <StatBlock
+              Icon={LuCircleCheck}
+              value={`${results.score}/${results.totalQuestions}`}
+              label="Respuestas Correctas"
+            />
+            <StatBlock
+              Icon={LuPercent}
+              value={`${results.percentage.toFixed(1)}%`}
+              label="Porcentaje"
+              valueClass={tier.textClass}
+            />
+            <StatBlock
+              Icon={LuClock}
+              value={formatTime(results.timeTotal)}
+              label="Tiempo Total"
+            />
             <div className="text-center">
-              <p className="text-4xl font-bold text-slate-100 mb-2">
-                {results.score}/{results.totalQuestions}
+              <tier.Icon
+                aria-hidden="true"
+                className={`mx-auto mb-2 h-6 w-6 ${tier.textClass}`}
+              />
+              <p className={`text-2xl font-bold mb-1 ${tier.textClass}`}>
+                {tier.label}
               </p>
-              <p className="text-sm text-slate-400">Respuestas Correctas</p>
-            </div>
-
-            {/* Percentage */}
-            <div className="text-center">
-              <p className={`text-4xl font-bold mb-2 ${getScoreColor(results.percentage)}`}>
-                {results.percentage.toFixed(1)}%
-              </p>
-              <p className="text-sm text-slate-400">Porcentaje</p>
-            </div>
-
-            {/* Time */}
-            <div className="text-center">
-              <p className="text-4xl font-bold text-slate-100 mb-2">
-                {formatTime(results.timeTotal)}
-              </p>
-              <p className="text-sm text-slate-400">Tiempo Total</p>
-            </div>
-
-            {/* Performance */}
-            <div className="text-center">
-              <p className="text-2xl font-bold text-slate-100 mb-2">
-                {results.percentage >= 80
-                  ? "⭐⭐⭐"
-                  : results.percentage >= 60
-                    ? "⭐⭐"
-                    : "⭐"}
-              </p>
-              <p className="text-sm text-slate-400">
-                {results.percentage >= 80
-                  ? "Excelente"
-                  : results.percentage >= 60
-                    ? "Bien"
-                    : "Necesita mejora"}
-              </p>
+              <p className="text-sm text-gray-3">Rendimiento</p>
             </div>
           </div>
         </div>
 
         {/* Category Breakdown */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-100 mb-6">
-            📈 Desempeño por Categoría
+        <section className="mb-8 rounded-2xl border border-line bg-surface p-6">
+          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-secondary">
+            <LuChartBar aria-hidden="true" className="h-5 w-5 text-gray-3" />
+            Desempeño por Categoría
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {Object.entries(results.categoryBreakdown).map(([category, data]) => (
-              <div key={category} className="bg-slate-900/50 rounded p-4">
-                <p className="text-sm font-semibold text-slate-300 mb-2 capitalize">
-                  {category.replace(/_/g, " ")}
+              <div key={category} className="rounded-lg bg-surface-2 p-4">
+                <p className="mb-2 text-sm font-semibold capitalize text-gray-1">
+                  {formatCategory(category)}
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full transition-all ${
-                          data.percentage >= 80
-                            ? "bg-green-500"
-                            : data.percentage >= 60
-                              ? "bg-yellow-500"
-                              : "bg-red-500"
-                        }`}
-                        style={{ width: `${data.percentage}%` }}
-                      />
-                    </div>
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-3">
+                    <div
+                      className={`h-full transition-all ${getBarClass(data.percentage)}`}
+                      style={{ width: `${data.percentage}%` }}
+                    />
                   </div>
-                  <span className="text-sm font-semibold text-slate-300 whitespace-nowrap">
+                  <span className="whitespace-nowrap text-sm font-semibold text-gray-1">
                     {data.correct}/{data.total}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="mt-2 text-xs text-gray-3">
                   {data.percentage.toFixed(0)}%
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Difficulty Breakdown */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-100 mb-6">
-            ⚡ Desempeño por Dificultad
+        <section className="mb-8 rounded-2xl border border-line bg-surface p-6">
+          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-secondary">
+            <LuZap aria-hidden="true" className="h-5 w-5 text-gray-3" />
+            Desempeño por Dificultad
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { key: "easy", label: "Fácil", color: "green" },
-              { key: "medium", label: "Medio", color: "yellow" },
-              { key: "hard", label: "Difícil", color: "red" },
-            ].map(({ key, label, color }) => {
-              const data = results.difficultyBreakdown[key as keyof typeof results.difficultyBreakdown];
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {DIFFICULTY_ROWS.map(({ key, label, barClass }) => {
+              const data = results.difficultyBreakdown[key];
               return (
-                <div key={key} className="bg-slate-900/50 rounded p-4">
-                  <p className="text-sm font-semibold text-slate-300 mb-2">{label}</p>
-                  <p className="text-2xl font-bold mb-3">
+                <div key={key} className="rounded-lg bg-surface-2 p-4">
+                  <p className="mb-2 text-sm font-semibold text-gray-1">
+                    {label}
+                  </p>
+                  <p className="mb-3 text-2xl font-bold text-secondary">
                     {data.correct}/{data.total}
                   </p>
-                  <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-surface-3">
                     <div
-                      className={`h-full transition-all bg-${color}-500`}
+                      className={`h-full transition-all ${barClass}`}
                       style={{ width: `${data.percentage}%` }}
                     />
                   </div>
-                  <p className="text-xs text-slate-500 mt-2">
+                  <p className="mt-2 text-xs text-gray-3">
                     {data.percentage.toFixed(0)}%
                   </p>
                 </div>
               );
             })}
           </div>
-        </div>
+        </section>
 
         {/* Detailed Results Table */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-100 mb-6">
-            📋 Detalle de Respuestas
+        <section className="mb-8 rounded-2xl border border-line bg-surface p-6">
+          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-secondary">
+            <LuListChecks aria-hidden="true" className="h-5 w-5 text-gray-3" />
+            Detalle de Respuestas
           </h2>
-          <div className="overflow-x-auto">
-            <ResultsTable results={results.answers} allQuestions={questionsBank} />
-          </div>
-        </div>
+          <ResultsTable
+            results={results.answers}
+            allQuestions={getQuestionsBySubject(subjectId)}
+          />
+        </section>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 justify-center mb-8">
+        <div className="mb-4 flex flex-col justify-center gap-4 sm:flex-row">
           <button
-            onClick={() => router.push("/")}
-            className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+            type="button"
+            onClick={() =>
+              router.push(
+                `/quiz?subject=${subjectId}&feedback=${feedback}&count=${count}&partial=${partial}`
+              )
+            }
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 font-semibold text-primary transition hover:bg-gray-1"
           >
-            ← Volver al Inicio
+            <LuRotateCcw aria-hidden="true" className="h-5 w-5" />
+            Reintentar Quiz
           </button>
           <button
-            onClick={() => router.push(`/quiz?feedback=${feedback}&count=${count}&partial=${partial}`)}
-            className="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold transition"
+            type="button"
+            onClick={() => router.push(`/materia/${subjectId}`)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-surface px-6 py-3 font-semibold text-secondary transition hover:border-secondary hover:bg-surface-2"
           >
-            🔄 Reintentar Quiz
+            <LuArrowLeft aria-hidden="true" className="h-5 w-5" />
+            Volver a la materia
+          </button>
+        </div>
+
+        <div className="mb-8 text-center">
+          <button
+            type="button"
+            onClick={() => router.push("/")}
+            className="text-sm text-gray-3 underline transition hover:text-secondary"
+          >
+            Volver al inicio
           </button>
         </div>
 
         {/* Feedback */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-slate-100 mb-4">💡 Recomendaciones</h3>
-          <p className="text-slate-300 leading-relaxed">
-            {results.percentage >= 80
-              ? partial === "primer"
-                ? "¡Excelente desempeño! Dominas muy bien los temas del primer parcial. Estás listo para el examen. Continúa repasando los conceptos claves."
-                : "¡Excelente desempeño! Dominas muy bien los temas del segundo parcial. Estás bien preparado para el examen final. Sigue reforzando tus conocimientos."
-              : results.percentage >= 60
-                ? partial === "primer"
-                  ? "Buen trabajo en el primer parcial, pero hay áreas que necesitas reforzar. Revisa las preguntas que fallaste, especialmente en categorías con menor porcentaje."
-                  : "Buen trabajo en el segundo parcial, pero hay temas que necesitas profundizar. Revisa especialmente Riesgos, Costos de Calidad y Testing."
-                : partial === "primer"
-                  ? "Necesitas más estudio del primer parcial. Revisa cuidadosamente: Historia de Calidad, Definiciones fundamentales, ISO 9126. Practica más cálculos de Puntos de Función."
-                  : "Necesitas reforzar el segundo parcial. Enfócate en: Gestión de Riesgos, Costos asociados a Calidad, Ciclo de Deming, Evaluación Heurística y Estrategias de Testing."}
-          </p>
-        </div>
+        <section className="rounded-2xl border border-line bg-surface p-6">
+          <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold text-secondary">
+            <LuLightbulb aria-hidden="true" className="h-5 w-5 text-gray-3" />
+            Recomendaciones
+          </h3>
+          <p className="leading-relaxed text-gray-3">{recommendation}</p>
+        </section>
       </div>
     </div>
   );
@@ -244,18 +349,7 @@ function ResultsPageContent() {
 
 export default function ResultsPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-          <div className="text-center">
-            <p className="text-slate-400 mb-4">Cargando resultados...</p>
-            <div className="inline-block animate-spin">
-              <div className="h-8 w-8 border-4 border-slate-700 border-t-blue-500 rounded-full" />
-            </div>
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<LoadingScreen label="Cargando resultados..." />}>
       <ResultsPageContent />
     </Suspense>
   );

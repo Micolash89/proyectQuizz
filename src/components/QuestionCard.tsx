@@ -1,7 +1,12 @@
 "use client";
 
-import { Question } from "@/types/quiz";
-import { useState, useEffect } from "react";
+import { useState, type ReactNode } from "react";
+import {
+  LuChevronDown,
+  LuCircleCheck,
+  LuCircleX,
+} from "react-icons/lu";
+import type { Question } from "@/types/quiz";
 
 interface QuestionCardProps {
   question: Question;
@@ -17,6 +22,156 @@ interface QuestionCardProps {
   };
 }
 
+/** Estados visuales posibles de una opción. */
+type OptionState = "idle" | "selected" | "correct" | "wrong" | "muted";
+
+const OPTION_STATE_CLASSES: Record<OptionState, string> = {
+  idle: "border-line bg-surface-2 text-gray-1 hover:border-gray-2 hover:bg-surface-3",
+  selected: "border-secondary bg-primary text-secondary",
+  correct: "border-success bg-success/10 text-success",
+  wrong: "border-danger bg-danger/10 text-danger",
+  muted: "border-line bg-surface-2 text-gray-3 opacity-60",
+};
+
+function optionClasses(state: OptionState, disabled: boolean) {
+  return [
+    "flex w-full items-start gap-3 rounded-lg border-2 p-4 text-left transition",
+    OPTION_STATE_CLASSES[state],
+    disabled ? "cursor-not-allowed" : "cursor-pointer",
+  ].join(" ");
+}
+
+function OptionMarker({ state }: { state: OptionState }) {
+  if (state === "correct") {
+    return (
+      <LuCircleCheck aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
+    );
+  }
+  if (state === "wrong") {
+    return (
+      <LuCircleX aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
+    );
+  }
+  return null;
+}
+
+function DifficultyBadge({ difficulty }: { difficulty: Question["difficulty"] }) {
+  const map = {
+    easy: {
+      label: "Fácil",
+      className: "border-success/40 bg-success/10 text-success",
+    },
+    medium: {
+      label: "Medio",
+      className: "border-warning/40 bg-warning/10 text-warning",
+    },
+    hard: {
+      label: "Difícil",
+      className: "border-danger/40 bg-danger/10 text-danger",
+    },
+  } as const;
+  const { label, className } = map[difficulty];
+  return (
+    <span className={`rounded border px-3 py-1 text-xs font-medium ${className}`}>
+      {label}
+    </span>
+  );
+}
+
+function Badge({ children }: { children: ReactNode }) {
+  return (
+    <span className="rounded border border-line bg-surface-2 px-3 py-1 text-xs font-medium text-gray-2">
+      {children}
+    </span>
+  );
+}
+
+interface MultiAnswerGroupProps {
+  question: Question;
+  selectedAnswer?: string | string[];
+  hasAnswered: boolean;
+  showFeedback: boolean;
+  onSelect: (answer: string | string[]) => void;
+  getOptionState: (letter: string) => OptionState;
+}
+
+/**
+ * Grupo de checkboxes para preguntas de respuesta múltiple.
+ *
+ * El componente padre lo renderiza con `key={question.id}`, de modo que al
+ * cambiar de pregunta se remonta y el estado local se reinicializa a partir de
+ * `selectedAnswer`. Así evitamos un efecto que sincronice estado.
+ */
+function MultiAnswerGroup({
+  question,
+  selectedAnswer,
+  hasAnswered,
+  showFeedback,
+  onSelect,
+  getOptionState,
+}: MultiAnswerGroupProps) {
+  const [selected, setSelected] = useState<Set<string>>(() =>
+    Array.isArray(selectedAnswer) ? new Set(selectedAnswer) : new Set()
+  );
+
+  const toggle = (letter: string) => {
+    if (hasAnswered) return;
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(letter)) {
+        next.delete(letter);
+      } else {
+        next.add(letter);
+      }
+      return next;
+    });
+  };
+
+  const submit = () => {
+    if (selected.size > 0 && !hasAnswered) {
+      onSelect(Array.from(selected));
+    }
+  };
+
+  return (
+    <div>
+      <div className="mb-4 space-y-2">
+        {question.options.map((option) => (
+          <label
+            key={option.letter}
+            className={optionClasses(getOptionState(option.letter), hasAnswered)}
+          >
+            <OptionMarker state={getOptionState(option.letter)} />
+            {!showFeedback && (
+              <input
+                type="checkbox"
+                checked={selected.has(option.letter)}
+                onChange={() => toggle(option.letter)}
+                disabled={hasAnswered}
+                className="mt-1 h-4 w-4 cursor-pointer accent-secondary"
+              />
+            )}
+            <span>
+              <span className="font-semibold">{option.letter})</span>{" "}
+              {option.text}
+            </span>
+          </label>
+        ))}
+      </div>
+
+      {!hasAnswered && selected.size > 0 && (
+        <button
+          type="button"
+          onClick={submit}
+          className="w-full rounded-lg bg-secondary px-4 py-2 font-semibold text-primary transition hover:bg-gray-1"
+        >
+          Confirmar respuestas ({selected.size})
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function QuestionCard({
   question,
   currentNumber,
@@ -28,270 +183,142 @@ export function QuestionCard({
   feedbackAnswer,
 }: QuestionCardProps) {
   const [expanded, setExpanded] = useState(true);
-  
-  // Determine if this is a multi-answer question
   const isMultiAnswer = Array.isArray(question.correctAnswer);
-  
-  // Local state for multi-select checkboxes
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState<Set<string>>(
-    isMultiAnswer && Array.isArray(selectedAnswer)
-      ? new Set(selectedAnswer)
-      : new Set()
-  );
 
-  // Reset checkboxes when question changes
-  useEffect(() => {
-    setSelectedCheckboxes(new Set());
-  }, [question.id]);
+  const isCorrectOption = (letter: string): boolean =>
+    Array.isArray(question.correctAnswer)
+      ? question.correctAnswer.includes(letter)
+      : question.correctAnswer === letter;
 
-  const getDifficultyColor = () => {
-    switch (question.difficulty) {
-      case "easy":
-        return "bg-green-900/30 text-green-400 border-green-700";
-      case "medium":
-        return "bg-yellow-900/30 text-yellow-400 border-yellow-700";
-      case "hard":
-        return "bg-red-900/30 text-red-400 border-red-700";
-      default:
-        return "bg-slate-700 text-slate-300";
-    }
-  };
+  const isSelected = (letter: string): boolean =>
+    Array.isArray(selectedAnswer)
+      ? selectedAnswer.includes(letter)
+      : selectedAnswer === letter;
 
-  const getCategoryColor = () => {
-    const colors: { [key: string]: string } = {
-      historia: "bg-blue-900/30 text-blue-300",
-      definiciones: "bg-purple-900/30 text-purple-300",
-      pdca: "bg-cyan-900/30 text-cyan-300",
-      principios: "bg-indigo-900/30 text-indigo-300",
-      herramientas: "bg-green-900/30 text-green-300",
-      iso9126: "bg-pink-900/30 text-pink-300",
-      metricas: "bg-orange-900/30 text-orange-300",
-      pf_teoria: "bg-yellow-900/30 text-yellow-300",
-      pf_calculo: "bg-red-900/30 text-red-300",
-      equipo: "bg-teal-900/30 text-teal-300",
-      costos: "bg-rose-900/30 text-rose-300",
-      clientes: "bg-fuchsia-900/30 text-fuchsia-300",
-      decisiones: "bg-amber-900/30 text-amber-300",
-      casos_practicos: "bg-violet-900/30 text-violet-300",
-      vf_justificado: "bg-lime-900/30 text-lime-300",
-      analisis: "bg-sky-900/30 text-sky-300",
-      riesgos: "bg-red-900/30 text-red-300",
-      costos_calidad: "bg-amber-900/30 text-amber-300",
-      deming: "bg-cyan-900/30 text-cyan-300",
-      accesibilidad: "bg-green-900/30 text-green-300",
-      heuristica: "bg-purple-900/30 text-purple-300",
-      testing: "bg-blue-900/30 text-blue-300",
-    };
-    return colors[question.category] || "bg-slate-700 text-slate-300";
-  };
+  const isUserWrongSelection = (letter: string): boolean =>
+    showFeedback &&
+    !feedbackAnswer?.isCorrect &&
+    isSelected(letter) &&
+    !isCorrectOption(letter);
 
-  const handleCheckboxChange = (letter: string) => {
-    if (hasAnswered) return;
-    
-    const newSelected = new Set(selectedCheckboxes);
-    if (newSelected.has(letter)) {
-      newSelected.delete(letter);
-    } else {
-      newSelected.add(letter);
-    }
-    setSelectedCheckboxes(newSelected);
-  };
-
-  const handleSubmitMultiAnswer = () => {
-    if (selectedCheckboxes.size > 0 && !hasAnswered) {
-      onSelect(Array.from(selectedCheckboxes));
-    }
-  };
-
-  const isCorrectOption = (letter: string): boolean => {
-    if (Array.isArray(question.correctAnswer)) {
-      return question.correctAnswer.includes(letter);
-    }
-    return question.correctAnswer === letter;
-  };
-
-  const isUserWrongSelection = (letter: string): boolean => {
-    if (!showFeedback || feedbackAnswer?.isCorrect) return false;
-    if (Array.isArray(selectedAnswer)) {
-      return selectedAnswer.includes(letter) && !isCorrectOption(letter);
-    }
-    return selectedAnswer === letter && !isCorrectOption(letter);
-  };
-
-  const getOptionStyle = (letter: string) => {
+  const getOptionState = (letter: string): OptionState => {
     if (!showFeedback) {
-      const isSelected = Array.isArray(selectedAnswer)
-        ? selectedAnswer.includes(letter)
-        : selectedAnswer === letter;
-      return isSelected
-        ? "border-blue-500 bg-blue-900/20 text-slate-100"
-        : "border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500";
+      return isSelected(letter) ? "selected" : "idle";
     }
-    if (isCorrectOption(letter)) {
-      return "border-green-500 bg-green-900/30 text-green-300";
-    }
-    if (isUserWrongSelection(letter)) {
-      return "border-red-500 bg-red-900/30 text-red-300";
-    }
-    return "border-slate-600 bg-slate-800/50 text-slate-300 opacity-60";
+    if (isCorrectOption(letter)) return "correct";
+    if (isUserWrongSelection(letter)) return "wrong";
+    return "muted";
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4">
+    <div className="mx-auto w-full max-w-4xl">
       {/* Header */}
-      <div className="mb-6 pb-4 border-b border-slate-700">
-        <div className="flex justify-between items-start mb-3">
+      <div className="mb-6 border-b border-line pb-4">
+        <div className="mb-3 flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-sm font-semibold text-slate-400">
+            <h2 className="text-sm font-semibold text-gray-3">
               Pregunta {currentNumber} de {totalQuestions}
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
-              {((currentNumber / totalQuestions) * 100).toFixed(0)}% completado
+            <p className="mt-1 text-xs text-gray-3">
+              {totalQuestions > 0
+                ? ((currentNumber / totalQuestions) * 100).toFixed(0)
+                : 0}
+              % completado
             </p>
           </div>
-          <div className="flex gap-2">
-            <span
-              className={`px-3 py-1 rounded text-xs font-medium border ${getDifficultyColor()}`}
-            >
-              {question.difficulty === "easy"
-                ? "Fácil"
-                : question.difficulty === "medium"
-                  ? "Medio"
-                  : "Difícil"}
-            </span>
-            <span className={`px-3 py-1 rounded text-xs font-medium border ${getCategoryColor()}`}>
-              {question.category.replace(/_/g, " ")}
-            </span>
-            {isMultiAnswer && (
-              <span className="px-3 py-1 rounded text-xs font-medium border bg-purple-900/30 text-purple-300 border-purple-700">
-                Múltiples respuestas
-              </span>
-            )}
+          <div className="flex flex-wrap justify-end gap-2">
+            <DifficultyBadge difficulty={question.difficulty} />
+            <Badge>{question.category.replace(/_/g, " ")}</Badge>
+            {isMultiAnswer && <Badge>Múltiples respuestas</Badge>}
           </div>
         </div>
       </div>
 
       {/* Question */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold text-slate-100 leading-relaxed mb-6">
+        <h3 className="mb-6 text-lg font-semibold leading-relaxed text-gray-1">
           {question.text}
         </h3>
 
-        {question.type === "true_false" && (
+        {!isMultiAnswer && (
           <div className="space-y-2">
-            {question.options.map((option) => (
-              <button
-                key={option.letter}
-                onClick={() => !hasAnswered && onSelect(option.letter)}
-                disabled={hasAnswered}
-                className={`w-full text-left p-4 rounded border-2 transition ${getOptionStyle(option.letter)} ${hasAnswered ? "cursor-not-allowed" : "hover:bg-slate-700/50 cursor-pointer"}`}
-              >
-                {showFeedback && isCorrectOption(option.letter) && (
-                  <span className="mr-2 text-green-400 font-bold">✓</span>
-                )}
-                {showFeedback && isUserWrongSelection(option.letter) && (
-                  <span className="mr-2 text-red-400 font-bold">✗</span>
-                )}
-                <span className="font-semibold">{option.letter})</span> {option.text}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {question.type === "multiple_choice" && !isMultiAnswer && (
-          <div className="space-y-2">
-            {question.options.map((option) => (
-              <button
-                key={option.letter}
-                onClick={() => !hasAnswered && onSelect(option.letter)}
-                disabled={hasAnswered}
-                className={`w-full text-left p-4 rounded border-2 transition ${getOptionStyle(option.letter)} ${hasAnswered ? "cursor-not-allowed" : "hover:bg-slate-700/50 cursor-pointer"}`}
-              >
-                {showFeedback && isCorrectOption(option.letter) && (
-                  <span className="mr-2 text-green-400 font-bold">✓</span>
-                )}
-                {showFeedback && isUserWrongSelection(option.letter) && (
-                  <span className="mr-2 text-red-400 font-bold">✗</span>
-                )}
-                <span className="font-semibold">{option.letter})</span> {option.text}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {question.type === "multiple_choice" && isMultiAnswer && (
-          <div>
-            <div className="space-y-2 mb-4">
-              {question.options.map((option) => (
-                <label
+            {question.options.map((option) => {
+              const state = getOptionState(option.letter);
+              return (
+                <button
                   key={option.letter}
-                  className={`flex items-start p-4 rounded border-2 cursor-pointer transition ${getOptionStyle(option.letter)} ${hasAnswered ? "cursor-not-allowed" : "hover:bg-slate-700/50"}`}
+                  type="button"
+                  onClick={() => !hasAnswered && onSelect(option.letter)}
+                  disabled={hasAnswered}
+                  className={optionClasses(state, hasAnswered)}
                 >
-                  {showFeedback && isCorrectOption(option.letter) && (
-                    <span className="mr-2 mt-0.5 text-green-400 font-bold">✓</span>
-                  )}
-                  {showFeedback && isUserWrongSelection(option.letter) && (
-                    <span className="mr-2 mt-0.5 text-red-400 font-bold">✗</span>
-                  )}
-                  {!showFeedback && (
-                    <input
-                      type="checkbox"
-                      checked={selectedCheckboxes.has(option.letter)}
-                      onChange={() => handleCheckboxChange(option.letter)}
-                      disabled={hasAnswered}
-                      className="mt-1 mr-3 cursor-pointer"
-                    />
-                  )}
+                  <OptionMarker state={state} />
                   <span>
-                    <span className="font-semibold">{option.letter})</span> {option.text}
+                    <span className="font-semibold">{option.letter})</span>{" "}
+                    {option.text}
                   </span>
-                </label>
-              ))}
-            </div>
-            {!hasAnswered && selectedCheckboxes.size > 0 && (
-              <button
-                onClick={handleSubmitMultiAnswer}
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded transition"
-              >
-                Confirmar respuestas ({selectedCheckboxes.size})
-              </button>
-            )}
+                </button>
+              );
+            })}
           </div>
+        )}
+
+        {isMultiAnswer && (
+          <MultiAnswerGroup
+            key={question.id}
+            question={question}
+            selectedAnswer={selectedAnswer}
+            hasAnswered={hasAnswered}
+            showFeedback={showFeedback}
+            onSelect={onSelect}
+            getOptionState={getOptionState}
+          />
         )}
       </div>
 
       {/* Feedback */}
       {showFeedback && feedbackAnswer && (
         <div
-          className={`mb-8 p-4 rounded border-l-4 ${
+          className={`mb-8 rounded-lg border-l-4 p-4 ${
             feedbackAnswer.isCorrect
-              ? "bg-green-900/20 border-green-500"
-              : "bg-red-900/20 border-red-500"
+              ? "border-success bg-success/10"
+              : "border-danger bg-danger/10"
           }`}
         >
-          <div className="flex items-start gap-3 mb-3">
-            <span className={`text-xl font-bold ${feedbackAnswer.isCorrect ? "text-green-400" : "text-red-400"}`}>
-              {feedbackAnswer.isCorrect ? "✓ CORRECTO" : "✗ INCORRECTO"}
+          <div className="mb-3 flex items-center gap-2">
+            {feedbackAnswer.isCorrect ? (
+              <LuCircleCheck aria-hidden="true" className="h-5 w-5 text-success" />
+            ) : (
+              <LuCircleX aria-hidden="true" className="h-5 w-5 text-danger" />
+            )}
+            <span
+              className={`text-lg font-bold ${
+                feedbackAnswer.isCorrect ? "text-success" : "text-danger"
+              }`}
+            >
+              {feedbackAnswer.isCorrect ? "CORRECTO" : "INCORRECTO"}
             </span>
           </div>
 
-          <div className="space-y-2">
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="text-slate-300 hover:text-slate-100 text-sm font-semibold underline"
-            >
-              {expanded ? "▼" : "▶"} Justificación
-            </button>
+          <button
+            type="button"
+            onClick={() => setExpanded((prev) => !prev)}
+            aria-expanded={expanded}
+            className="inline-flex items-center gap-1 text-sm font-semibold text-gray-1 transition hover:text-secondary"
+          >
+            <LuChevronDown
+              aria-hidden="true"
+              className={`h-4 w-4 transition-transform ${expanded ? "" : "-rotate-90"}`}
+            />
+            Justificación
+          </button>
 
-            {expanded && (
-              <div className="mt-3 p-3 bg-slate-800/50 rounded text-slate-300 text-sm leading-relaxed">
-                <p>{feedbackAnswer.justification}</p>
-                <p className="text-slate-500 text-xs mt-3">
-                  Fuente: {question.source}
-                </p>
-              </div>
-            )}
-          </div>
+          {expanded && (
+            <div className="mt-3 rounded bg-surface-2 p-3 text-sm leading-relaxed text-gray-1">
+              <p>{feedbackAnswer.justification}</p>
+              <p className="mt-3 text-xs text-gray-3">Fuente: {question.source}</p>
+            </div>
+          )}
         </div>
       )}
     </div>

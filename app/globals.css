@@ -1,52 +1,68 @@
 @import "tailwindcss";
 
-:root {
-  --background: #0f172a;
-  --foreground: #e2e8f0;
-}
+/*
+  Design tokens
+  -------------
+  Paleta monocromática (negro / blanco / 3 grises) + colores semánticos.
+  Definidos como tokens de Tailwind v4 (@theme) para poder usarlos como
+  utilidades semánticas: bg-primary, text-secondary, border-gray-2,
+  text-success, text-warning, text-danger, etc.
+*/
+@theme {
+  /* Base */
+  --color-primary: #000000;
+  --color-secondary: #ffffff;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Grises (3) */
+  --color-gray-1: #f5f5f5; /* superficies claras / texto sobre primary */
+  --color-gray-2: #a3a3a3; /* bordes, divisores, estados inactivos */
+  --color-gray-3: #8f8f8f; /* texto secundario, íconos inactivos (AA sobre surface) */
+
+  /* Superficies (tema oscuro) */
+  --color-surface: #0f0f0f;
+  --color-surface-2: #1a1a1a;
+  --color-surface-3: #262626;
+  --color-line: #333333; /* borde estándar sobre superficies */
+
+  /* Semánticos */
+  --color-success: #22c55e; /* positivo / correcto */
+  --color-warning: #fbbf24; /* advertencia */
+  --color-danger: #ef4444; /* negativo / incorrecto */
+  --color-focus: #ffffff; /* anillo de foco accesible */
+
+  /* Aplicación */
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+
+  /* Tipografías (inyectadas por next/font en el layout) */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark theme as default */
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Global dark mode colors */
-html, html[data-theme="dark"] {
-  --background: #0f172a;
-  --foreground: #e2e8f0;
+html {
   color-scheme: dark;
 }
 
-/* Utility classes for dark theme */
-.dark-bg {
-  @apply bg-slate-900;
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-.dark-card {
-  @apply bg-slate-800 border border-slate-700;
+/* Foco visible accesible (WCAG 2.4.7 / 2.4.11) */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
-.dark-input {
-  @apply bg-slate-800 border border-slate-600 text-slate-100 placeholder-slate-400;
-}
-
-.dark-button {
-  @apply bg-slate-700 text-slate-100 hover:bg-slate-600 transition-colors;
-}
-
-/* Remove light theme media query since we want dark only */
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #0f172a;
-    --foreground: #e2e8f0;
+/* Respetar la preferencia de movimiento reducido (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -29,6 +29,39 @@ export type Difficulty = "easy" | "medium" | "hard";
 export type QuestionType = "multiple_choice" | "true_false" | "calculation" | "analysis";
 export type FeedbackMode = "immediate" | "end_only";
 
+export const DIFFICULTIES = ["easy", "medium", "hard"] as const;
+
+/**
+ * Identificadores de las materias disponibles.
+ * Agregar aquí (y en `src/data/subjects`) al sumar una nueva materia.
+ */
+export type SubjectId = "calidad-software";
+
+/**
+ * Clave del ícono a mostrar para una materia. El mapeo a un ícono concreto
+ * vive en la capa de UI (`react-icons/lu`), manteniendo los datos serializables.
+ */
+export type SubjectIcon = "graduation-cap" | "book-open" | "brain" | "shield-check";
+
+export interface Subject {
+  id: SubjectId;
+  /** Nombre completo de la materia. */
+  name: string;
+  /** Nombre corto para espacios reducidos. */
+  shortName: string;
+  /** Descripción breve mostrada en el selector de materias. */
+  description: string;
+  /** Institución (por ejemplo "UNLaM"). */
+  institution: string;
+  /** Ícono asociado a la materia. */
+  icon: SubjectIcon;
+  /** Temario por parcial, mostrado en la pantalla de configuración. */
+  topics: {
+    primer: string[];
+    segundo: string[];
+  };
+}
+
 export interface Option {
   letter: string;
   text: string;
